@@ -1,0 +1,27 @@
+#editor {
+
+    background-color:rgba(240,240,240,0.95);
+    box-shadow: 2px 2px 2px #666;
+    font-family: cambria;
+    padding:10px;
+
+}
+
+
+.editorCatalogObject{
+    
+    float:left;
+    width:100px;
+    height:100px;
+    background-color:rgba(240,240,200,0.95);
+    box-shadow: 2px 2px 2px #666;
+    border-radius:4px;
+    
+}
+
+
+.editorCatalogGroup{
+    
+    
+    
+}

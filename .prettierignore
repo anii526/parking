@@ -1,0 +1,6 @@
+dist
+coverage
+node_modules
+.vscode
+src/locales
+operation-result-types.ts

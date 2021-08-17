@@ -1,0 +1,14 @@
+@font-face {
+    font-family: "ARIALN.TTF";
+    src: url("ARIALN.TTF.eot");
+    src: url("ARIALN.TTF.eot?#iefix") format("embedded-opentype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "ArialNarrow";
+    src: url("ArialNarrow.svg#ArialNarrow") format("svg"), url("ArialNarrow.ttf") format("truetype"), url("ArialNarrow.woff") format("woff");
+    font-weight: normal;
+    font-style: normal;
+}
