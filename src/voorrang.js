@@ -1,3 +1,6 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+var $ = require("jquery");
+
 (function () {
     CanvasFunctions = {
         getMousePos: function (canvas, evt) {
@@ -304,7 +307,7 @@ height 	Optional. The height of the image to use (stretch or reduce the image)
         this.reverse = false;
         this.heading = 0;
         this.braking = 0;
-        this.imgUrl = "./images/vehicles/sports_car_grey.png";
+        this.imgUrl = "./assets/sports_car_grey.png";
 
         this.imageObj = new Image();
         this.imageObj.src = this.imgUrl;
@@ -671,7 +674,9 @@ height 	Optional. The height of the image to use (stretch or reduce the image)
         this.normalSpeed = 5;
         this.targetReachedDistance = 170; //15
 
-        this.chooseTurnAround = function () {};
+        this.chooseTurnAround = function () {
+            //
+        };
 
         this.tick = function () {
             if (this.reachedTarget == true) {
@@ -779,7 +784,7 @@ height 	Optional. The height of the image to use (stretch or reduce the image)
         };
         this.gotoNextTarget();
 
-        this.setTarget = function (coord, heading) {
+        this.setTarget = function (coord) {
             this.reachedTarget = false;
             this.currentTarget = coord;
         };
@@ -802,18 +807,18 @@ height 	Optional. The height of the image to use (stretch or reduce the image)
         };
     }
 
-    function subdivideOver(xStart, yStart, xEnd, yEnd, minDistance) {
-        var angle = Math.atan2(xEnd - xStart, yEnd - yStart);
-        var distance = Math.sqrt(Math.pow(xEnd - xStart, 2) + Math.pow(yEnd - yStart, 2));
-        var amount = Math.floor(distance / minDistance);
-        var coords = [];
-        for (var d = 0; d < distance; d += minDistance) {
-            //Precalc cos and sin to make this faster :)
-            //console.log(d)
-            coords.push(new Coord(xStart + Math.sin(angle) * d, yStart + Math.cos(angle) * d));
-        }
-        return coords;
-    }
+    // function subdivideOver(xStart, yStart, xEnd, yEnd, minDistance) {
+    //     var angle = Math.atan2(xEnd - xStart, yEnd - yStart);
+    //     var distance = Math.sqrt(Math.pow(xEnd - xStart, 2) + Math.pow(yEnd - yStart, 2));
+    //     // var amount = Math.floor(distance / minDistance);
+    //     var coords = [];
+    //     for (var d = 0; d < distance; d += minDistance) {
+    //         //Precalc cos and sin to make this faster :)
+    //         //console.log(d)
+    //         coords.push(new Coord(xStart + Math.sin(angle) * d, yStart + Math.cos(angle) * d));
+    //     }
+    //     return coords;
+    // }
 
     Wegmeubulair = {};
 
@@ -829,7 +834,9 @@ height 	Optional. The height of the image to use (stretch or reduce the image)
             env.rect(this.xpos - 3.0, this.ypos - 3.0, 6, 6);
             env.stroke();
         };
-        this.tick = function () {};
+        this.tick = function () {
+            //
+        };
     };
 
     Wegmeubulair.tarmac10 = function (x, y, rotation) {
@@ -873,44 +880,46 @@ Wegmeubulair_pylonnen = function(xStart, yStart, xEnd, yEnd, distanceBetween){
 
 */
 
-    function RoutePoint(x, y, id) {
-        this.id = id || "unset";
-        this.position = new Coord(x, y);
-        this.render = function (env) {
-            env.strokeStyle = "#666666";
-            env.fillStyle = "#666666";
-            env.lineWidth = 1;
-            env.beginPath();
-            //console.log(this.getAckermanRadius())
-            env.arc(this.position.x, this.position.y, 3, 0, 2 * Math.PI, false);
-            env.stroke();
-            env.fill();
-        };
-        this.setId = function (id) {
-            this.id = id;
-        };
-    }
+    // function RoutePoint(x, y, id) {
+    //     this.id = id || "unset";
+    //     this.position = new Coord(x, y);
+    //     this.render = function (env) {
+    //         env.strokeStyle = "#666666";
+    //         env.fillStyle = "#666666";
+    //         env.lineWidth = 1;
+    //         env.beginPath();
+    //         //console.log(this.getAckermanRadius())
+    //         env.arc(this.position.x, this.position.y, 3, 0, 2 * Math.PI, false);
+    //         env.stroke();
+    //         env.fill();
+    //     };
+    //     this.setId = function (id) {
+    //         this.id = id;
+    //     };
+    // }
 
-    function Route(id) {
-        this.points = {};
-        this.id = id;
-        this.pointIdPosition = 0;
-        this.addPoint = function (routePoint) {
-            this.points[this.pointIdPosition] = routePoint;
-            this.pointIdPosition++;
-        };
-    }
+    // function Route(id) {
+    //     this.points = {};
+    //     this.id = id;
+    //     this.pointIdPosition = 0;
+    //     this.addPoint = function (routePoint) {
+    //         this.points[this.pointIdPosition] = routePoint;
+    //         this.pointIdPosition++;
+    //     };
+    // }
 
-    function Routes() {}
+    // function Routes() {
+    //     //
+    // }
 
-    function RoadSection(id) {
-        this.width = 200;
-        this.height = 200;
+    // function RoadSection(id) {
+    //     this.width = 200;
+    //     this.height = 200;
 
-        this.tick = function () {};
+    //     this.tick = function () {};
 
-        this.render = function () {};
-    }
+    //     this.render = function () {};
+    // }
 
     function Level() {
         /*
@@ -934,7 +943,9 @@ Wegmeubulair_pylonnen = function(xStart, yStart, xEnd, yEnd, distanceBetween){
         this.pointA = Coord();
         this.pointB = Coord();
 
-        this.render = function () {};
+        this.render = function () {
+            //
+        };
 
         this.leftClick = function (position, n) {
             if (n == 0) {
@@ -955,96 +966,96 @@ Wegmeubulair_pylonnen = function(xStart, yStart, xEnd, yEnd, distanceBetween){
         },
     };
 
-    function Editor(appendTo, canvii) {
-        $(appendTo).append('<div id="editor"></div>');
+    // function Editor(appendTo, canvii) {
+    //     $(appendTo).append('<div id="editor"></div>');
 
-        this.modi = ["place", "place_array"];
-        this.modus = "place_array";
+    //     this.modi = ["place", "place_array"];
+    //     this.modus = "place_array";
 
-        //Array tool:
-        this.pointA = new Coord();
-        this.pointB = new Coord();
-        this.timesClicked = 0;
+    //     //Array tool:
+    //     this.pointA = new Coord();
+    //     this.pointB = new Coord();
+    //     this.timesClicked = 0;
 
-        this.processArrayToolClick = function (x, y) {
-            if (this.selectedCatalogObject == undefined) {
-                this.timesClicked = 0;
-                return 0;
-            }
+    //     this.processArrayToolClick = function (x, y) {
+    //         if (this.selectedCatalogObject == undefined) {
+    //             this.timesClicked = 0;
+    //             return 0;
+    //         }
 
-            this.timesClicked++;
-            if (this.timesClicked == 1) {
-                console.log(this);
-                this.pointA.x = x;
-                this.pointA.y = y;
-            }
-            if (this.timesClicked == 2) {
-                this.pointB.x = x;
-                this.pointB.y = y;
+    //         this.timesClicked++;
+    //         if (this.timesClicked == 1) {
+    //             console.log(this);
+    //             this.pointA.x = x;
+    //             this.pointA.y = y;
+    //         }
+    //         if (this.timesClicked == 2) {
+    //             this.pointB.x = x;
+    //             this.pointB.y = y;
 
-                var points = subdivideOver(this.pointA.x, this.pointA.y, this.pointB.x, this.pointB.y, 25);
-                for (var index in points) {
-                    world.addObject(new this.selectedCatalogObject(points[index].x, points[index].y));
-                }
-                this.timesClicked = 0;
-            }
-        };
+    //             var points = subdivideOver(this.pointA.x, this.pointA.y, this.pointB.x, this.pointB.y, 25);
+    //             for (var index in points) {
+    //                 world.addObject(new this.selectedCatalogObject(points[index].x, points[index].y));
+    //             }
+    //             this.timesClicked = 0;
+    //         }
+    //     };
 
-        this.mouseDown = function (x, y) {
-            if (this.modus == "place") {
-                world.addObject(new this.selectedCatalogObject(x, y));
-            }
+    //     this.mouseDown = function (x, y) {
+    //         if (this.modus == "place") {
+    //             world.addObject(new this.selectedCatalogObject(x, y));
+    //         }
 
-            if (this.modus == "place_array") {
-                this.processArrayToolClick(x, y);
-            }
-        };
+    //         if (this.modus == "place_array") {
+    //             this.processArrayToolClick(x, y);
+    //         }
+    //     };
 
-        this.drawCatalog = function () {
-            this.html = "";
-            for (var groupId in AvailableObjects) {
-                this.html += '<div class="editorCatalogGroup"><h3>' + AvailableObjects[groupId].name + "</h3>";
+    //     this.drawCatalog = function () {
+    //         this.html = "";
+    //         for (var groupId in AvailableObjects) {
+    //             this.html += '<div class="editorCatalogGroup"><h3>' + AvailableObjects[groupId].name + "</h3>";
 
-                for (var objectId in AvailableObjects[groupId].contents) {
-                    this.html +=
-                        '<div class="editorCatalogObject" id="' +
-                        groupId +
-                        "_" +
-                        objectId +
-                        '">' +
-                        objectId +
-                        '<canvas id="canvas_' +
-                        groupId +
-                        "_" +
-                        objectId +
-                        '">width="75px" height="75px"></canvas></div>';
-                }
-                this.html += "</div>";
-            }
-            $("#editor").html(this.html);
+    //             for (var objectId in AvailableObjects[groupId].contents) {
+    //                 this.html +=
+    //                     '<div class="editorCatalogObject" id="' +
+    //                     groupId +
+    //                     "_" +
+    //                     objectId +
+    //                     '">' +
+    //                     objectId +
+    //                     '<canvas id="canvas_' +
+    //                     groupId +
+    //                     "_" +
+    //                     objectId +
+    //                     '">width="75px" height="75px"></canvas></div>';
+    //             }
+    //             this.html += "</div>";
+    //         }
+    //         $("#editor").html(this.html);
 
-            for (var groupId in AvailableObjects) {
-                for (var objectId in AvailableObjects[groupId].contents) {
-                    var canvasContext = document.getElementById("canvas_" + groupId + "_" + objectId).getContext("2d");
-                    var o = new AvailableObjects[groupId].contents[objectId]();
-                    o.render(canvasContext);
-                }
-            }
+    //         for (var groupId in AvailableObjects) {
+    //             for (var objectId in AvailableObjects[groupId].contents) {
+    //                 var canvasContext = document.getElementById("canvas_" + groupId + "_" + objectId).getContext("2d");
+    //                 var o = new AvailableObjects[groupId].contents[objectId]();
+    //                 o.render(canvasContext);
+    //             }
+    //         }
 
-            $(".editorCatalogObject").on("click", function (e, i) {
-                document.editor.setSelectedCatalogObject(e.currentTarget.id);
-            });
+    //         $(".editorCatalogObject").on("click", function (e, i) {
+    //             document.editor.setSelectedCatalogObject(e.currentTarget.id);
+    //         });
 
-            this.selectedCatalogObject = false;
-            this.setSelectedCatalogObject = function (id) {
-                var parts = id.split("_");
-                this.selectedCatalogObject = AvailableObjects[parts[0]].contents[parts[1]];
-                console.log("Selected " + id + " from the catalog");
-            };
-        };
+    //         this.selectedCatalogObject = false;
+    //         this.setSelectedCatalogObject = function (id) {
+    //             var parts = id.split("_");
+    //             this.selectedCatalogObject = AvailableObjects[parts[0]].contents[parts[1]];
+    //             console.log("Selected " + id + " from the catalog");
+    //         };
+    //     };
 
-        this.drawCatalog();
-    }
+    //     this.drawCatalog();
+    // }
 
     function World() {
         this.translateX = 0;
