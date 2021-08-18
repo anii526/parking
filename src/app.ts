@@ -33,6 +33,9 @@ export class CanvasFunctions {
     };
 }
 
+(document as any).loadedImages = {
+    //
+};
 // function rotateAndPaintImage(context, image, angleInRad, positionX, positionY, axisX, axisY) {
 //     context.translate(positionX, positionY);
 //     context.rotate(angleInRad);
@@ -219,49 +222,59 @@ export class CarEngine {
     }
 }
 
-function Wheels(parent) {
-    this.mindrivingCircle = 80;
-    this.frontWheels = [];
-    this.backWheels = [];
-    this.steerDist = 0;
-    this.parent = parent;
-    this.addFrontWheel = function (wheel) {
+export class Wheels {
+    public mindrivingCircle: number;
+    public frontWheels: any[];
+    public backWheels: any[];
+    public steerDist: number;
+    public parent: any;
+    public steerAngle: any;
+    public centerOfBackWheels: any;
+    constructor(parent: any) {
+        this.mindrivingCircle = 80;
+        this.frontWheels = [];
+        this.backWheels = [];
+        this.steerDist = 0;
+        this.parent = parent;
+        this.steerAngle = 0.5 * Math.PI;
+    }
+    public addFrontWheel(wheel: any) {
         this.frontWheels.push(wheel);
         this.update();
-    };
+    }
 
-    this.addBackWheel = function (wheel) {
+    public addBackWheel(wheel: any) {
         this.backWheels.push(wheel);
         this.update();
-    };
-    this.steerToDist = function (dist) {
+    }
+    public steerToDist(dist: any) {
         this.steerDist = dist;
-        for (var index in this.frontWheels) {
-            var targetAngle = Math.atan(
+        for (const index in this.frontWheels) {
+            const targetAngle = Math.atan(
                 (this.centerOfBackWheels - this.frontWheels[index].xoffset) / (this.frontWheels[index].yoffset - dist)
             );
 
             this.frontWheels[index].rotateTo(targetAngle);
         }
-    };
-
-    this.increment = function (val) {
+    }
+    public increment(val: any) {
+        let newSteerAngle: any;
         if (this.steerAngle + val > Math.PI) {
             newSteerAngle = -this.steerAngle + val;
         } else {
             newSteerAngle = this.steerAngle + val;
         }
 
-        var ackDistance = Math.tan(newSteerAngle) * 100;
+        const ackDistance = Math.tan(newSteerAngle) * 100;
         if (Math.abs(ackDistance) > this.mindrivingCircle) {
             this.steerAngle = newSteerAngle;
             this.steerToDist(ackDistance);
         }
         //Angle of steer to ackerman distance:
-    };
+    }
 
     //reduce to zero
-    this.reduce = function (val) {
+    public reduce(val: any) {
         val = val || 1.05;
 
         //this.steerAngle = Math.atan(this.steerDist)/100
@@ -270,20 +283,17 @@ function Wheels(parent) {
             this.steerDist *= val;
             this.steerToDist(this.steerDist);
         }
-    };
-
-    this.steerAngle = 0.5 * Math.PI;
-
-    this.incrementDistance = function (val) {
+    }
+    public incrementDistance(val: any) {
         this.steerDist += val;
         this.steerToDist(this.steerDist);
-    };
+    }
 
-    this.update = function () {
+    public update() {
         //Center of back wheels (x)
-        sum = 0;
-        totalBackWheels = 0;
-        for (var index in this.backWheels) {
+        let sum = 0;
+        let totalBackWheels = 0;
+        for (const index in this.backWheels) {
             totalBackWheels += 1;
             sum += this.backWheels[index].xoffset;
         }
@@ -291,22 +301,21 @@ function Wheels(parent) {
             this.centerOfBackWheels = sum / totalBackWheels;
         }
         //Anckerman center:
-    };
-
-    this.render = function (env) {
+    }
+    public render(env: any) {
         //Do not draw debug:
         //return(true)
 
-        var anckermanPos = this.parent.getPosition(this.centerOfBackWheels, this.steerDist);
+        const anckermanPos = this.parent.getPosition(this.centerOfBackWheels, this.steerDist);
         if (this.getAckermanRadius() > 1 && this.getAckermanRadius() < 1000) {
-            var ackermanCenter = this.getAckermanpos();
+            const ackermanCenter = this.getAckermanpos();
 
             env.beginPath();
             //console.log(this.getAckermanRadius())
             env.arc(ackermanCenter.x, ackermanCenter.y, 2, 0, 2 * Math.PI, false);
             env.stroke();
 
-            for (index in this.frontWheels) {
+            for (const index in this.frontWheels) {
                 env.lineWidth = 0.5;
                 env.strokeStyle = "rgba(200,200,200,0.9)";
                 env.beginPath();
@@ -320,20 +329,19 @@ function Wheels(parent) {
             env.arc(anckermanPos.x, anckermanPos.y, this.getAckermanRadius(), 0, 2 * Math.PI, false);
             env.stroke();
         }
-    };
-    this.getAckermanpos = function () {
+    }
+    public getAckermanpos() {
         return this.parent.getPosition(this.centerOfBackWheels, this.steerDist);
-    };
-    this.getRelativeAckermanPos = function () {
+    }
+    public getRelativeAckermanPos() {
         return new Coord(this.centerOfBackWheels, this.steerDist);
-    };
+    }
 
-    this.getAckermanRadius = function () {
+    public getAckermanRadius() {
         return Math.abs(this.steerDist);
-    };
+    }
 }
 
-document.loadedImages = {};
 function Car() {
     this.xpos = 100;
     this.ypos = 100;
