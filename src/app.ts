@@ -342,84 +342,132 @@ export class Wheels {
     }
 }
 
-function Car() {
-    this.xpos = 100;
-    this.ypos = 100;
-    this.friction = 0.95; //-1
-    this.mass = 50;
-    this.blinkers = 0; //0 = off , -1 left, 1: right, 2 all
-    this.blinkerIteration = 0;
+export class Car {
+    public xpos = 100;
+    public ypos = 100;
+    public friction = 0.95; //-1
+    public mass = 50;
+    public blinkers = 0; //0 = off , -1 left, 1: right, 2 all
+    public blinkerIteration = 0;
 
-    this.vforward = 0;
-    this.engine = new CarEngine();
-    this.reverse = false;
-    this.heading = 0;
-    this.braking = 0;
-    this.imgUrl = "./assets/sports_car_grey.png";
+    public vforward = 0;
+    public engine: any;
+    public reverse = false;
+    public heading = 0;
+    public braking = 0;
+    public imgUrl = "./assets/sports_car_grey.png";
 
-    this.imageObj = new Image();
-    this.imageObj.src = this.imgUrl;
-    this.imageXoffset = 2;
-    this.imageYoffset = 5;
-    this.imageLoaded = false;
-    // eslint-disable-next-line @typescript-eslint/no-this-alias
-    var parent = this;
-    this.imageObj.onload = function () {
-        parent.imageLoaded = true;
-        console.log(this.src);
-    };
+    public imageObj: any;
+    public imageXoffset = 2;
+    public imageYoffset = 5;
+    public imageLoaded = false;
 
     //Following determines the car sizes (pixels):
-    this.height = 190 / 2;
-    this.length = this.height;
-    this.width = 45;
+    public height = 190 / 2;
+    public length: any;
+    public width = 45;
 
-    this.leftFrontWheel = new Wheel(-(this.width / 2), this.height / 3, this);
-    this.rightFrontWheel = new Wheel(this.width / 2, this.height / 3, this);
+    public leftFrontWheel: any;
+    public rightFrontWheel: any;
 
-    //this.midLeftFrontWheel = new Wheel(-(this.width/2), this.height/6, this)
-    //this.midRightFrontWheel = new Wheel((this.width/2), this.height/6, this)
+    public leftBackWheel: any;
+    public rightBackWheel: any;
+    public wheels: any[];
+    public steering: any;
+    public frontCoord: any;
+    public backCoord: any;
+    public alpha = 1;
+    public x = 0;
+    public y = 0;
+    public dCenterAck: any;
+    public backWheelsPosition: any;
+    public dxAcker: any;
+    public dyAcker: any;
+    public targetX: any;
+    public targetY: any;
+    constructor() {
+        this.xpos = 100;
+        this.ypos = 100;
+        this.friction = 0.95; //-1
+        this.mass = 50;
+        this.blinkers = 0; //0 = off , -1 left, 1: right, 2 all
+        this.blinkerIteration = 0;
 
-    //this.leftFrontWheel.bindTo(this.rightFrontWheel)
-    this.leftBackWheel = new Wheel(-(this.width / 2), -(this.height / 3), this);
-    this.rightBackWheel = new Wheel(this.width / 2, -(this.height / 3), this);
-    this.wheels = [this.leftFrontWheel, this.rightFrontWheel, this.leftBackWheel, this.rightBackWheel];
-    this.steering = new Wheels(this);
-    this.steering.addFrontWheel(this.leftFrontWheel);
-    this.steering.addFrontWheel(this.rightFrontWheel);
+        this.vforward = 0;
+        this.engine = new CarEngine();
+        this.reverse = false;
+        this.heading = 0;
+        this.braking = 0;
+        this.imgUrl = "./assets/sports_car_grey.png";
 
-    //this.steering.addFrontWheel(this.midLeftFrontWheel);
-    //this.steering.addFrontWheel(this.midRightFrontWheel);
+        this.imageObj = new Image();
+        this.imageObj.src = this.imgUrl;
+        this.imageXoffset = 2;
+        this.imageYoffset = 5;
+        this.imageLoaded = false;
 
-    this.steering.addBackWheel(this.leftBackWheel);
-    this.steering.addBackWheel(this.rightBackWheel);
+        this.imageObj.onload = () => {
+            this.imageLoaded = true;
+            console.log(this.imageObj.src);
+        };
 
-    this.steerIncrement = function (increment) {
+        //Following determines the car sizes (pixels):
+        this.height = 190 / 2;
+        this.length = this.height;
+        this.width = 45;
+
+        this.leftFrontWheel = new Wheel(-(this.width / 2), this.height / 3, this);
+        this.rightFrontWheel = new Wheel(this.width / 2, this.height / 3, this);
+
+        //this.midLeftFrontWheel = new Wheel(-(this.width/2), this.height/6, this)
+        //this.midRightFrontWheel = new Wheel((this.width/2), this.height/6, this)
+
+        //this.leftFrontWheel.bindTo(this.rightFrontWheel)
+        this.leftBackWheel = new Wheel(-(this.width / 2), -(this.height / 3), this);
+        this.rightBackWheel = new Wheel(this.width / 2, -(this.height / 3), this);
+        this.wheels = [this.leftFrontWheel, this.rightFrontWheel, this.leftBackWheel, this.rightBackWheel];
+        this.steering = new Wheels(this);
+        this.steering.addFrontWheel(this.leftFrontWheel);
+        this.steering.addFrontWheel(this.rightFrontWheel);
+
+        //this.steering.addFrontWheel(this.midLeftFrontWheel);
+        //this.steering.addFrontWheel(this.midRightFrontWheel);
+
+        this.steering.addBackWheel(this.leftBackWheel);
+        this.steering.addBackWheel(this.rightBackWheel);
+
+        this.frontCoord = new Coord(this.x, this.y);
+        this.backCoord = new Coord(this.x, this.y);
+
+        this.tick();
+    }
+
+    public steerIncrement(increment: any) {
         //this.leftFrontWheel.increment(increment);
         this.steering.increment(increment);
-    };
+    }
 
-    this.blinkersLeft = function () {
+    public blinkersLeft() {
         if (this.blinkers != 2) {
             this.blinkers = -1;
         }
-    };
-    this.blinkersRight = function () {
+    }
+    public blinkersRight() {
         if (this.blinkers != 2) {
             this.blinkers = 1;
         }
-    };
+    }
 
-    this.blinkersReset = function () {
+    public blinkersReset() {
         this.blinkers = 0;
-    };
+    }
 
-    this.blinkersWarning = function () {
+    public blinkersWarning() {
         this.blinkers = 2;
-    };
+    }
 
-    this.render = function (env) {
-        for (var index in this.wheels) {
+    public render(env: any) {
+        for (const index in this.wheels) {
             this.wheels[index].render(env);
         }
 
@@ -463,12 +511,14 @@ function Car() {
 
         if (this.braking > 0) {
             // Fill with gradient
-            env.fillStyle = grd;
+            let grd;
+            console.log("строка ниже под вопросом");
+            env.fillStyle = grd || "";
 
             env.beginPath();
 
-            var leftLightPos = this.getPosition(-0.5 * this.length, 0.4 * this.width);
-            var grd = env.createRadialGradient(leftLightPos.x, leftLightPos.y, 0, leftLightPos.x, leftLightPos.y, 5);
+            const leftLightPos = this.getPosition(-0.5 * this.length, 0.4 * this.width);
+            grd = env.createRadialGradient(leftLightPos.x, leftLightPos.y, 0, leftLightPos.x, leftLightPos.y, 5);
             grd.addColorStop(0, "rgba(255,0,0,1)");
             grd.addColorStop(1, "rgba(255,0,0,0)");
 
@@ -476,15 +526,8 @@ function Car() {
             env.fillStyle = grd;
             env.fill();
 
-            var rightLightPos = this.getPosition(-0.5 * this.length, -0.4 * this.width);
-            var grd = env.createRadialGradient(
-                rightLightPos.x,
-                rightLightPos.y,
-                0,
-                rightLightPos.x,
-                rightLightPos.y,
-                5
-            );
+            const rightLightPos = this.getPosition(-0.5 * this.length, -0.4 * this.width);
+            grd = env.createRadialGradient(rightLightPos.x, rightLightPos.y, 0, rightLightPos.x, rightLightPos.y, 5);
             grd.addColorStop(0, "rgba(255,0,0,1)");
             grd.addColorStop(1, "rgba(255,0,0,0)");
 
@@ -502,8 +545,8 @@ function Car() {
 
             if (this.blinkers == -1 || this.blinkers == 2) {
                 env.beginPath();
-                var leftLightPos = this.getPosition(-0.47 * this.length, 0.42 * this.width);
-                var grd = env.createRadialGradient(
+                const leftLightPos = this.getPosition(-0.47 * this.length, 0.42 * this.width);
+                const grd = env.createRadialGradient(
                     leftLightPos.x,
                     leftLightPos.y,
                     0,
@@ -521,8 +564,8 @@ function Car() {
 
             if (this.blinkers == 1 || this.blinkers == 2) {
                 env.beginPath();
-                var rightLightPos = this.getPosition(-0.47 * this.length, -0.42 * this.width);
-                var grd = env.createRadialGradient(
+                const rightLightPos = this.getPosition(-0.47 * this.length, -0.42 * this.width);
+                const grd = env.createRadialGradient(
                     rightLightPos.x,
                     rightLightPos.y,
                     0,
@@ -538,9 +581,9 @@ function Car() {
                 env.fill();
             }
         }
-    };
+    }
 
-    this.brakeReverse = function (val) {
+    public brakeReverse(val: any) {
         if (this.reverse == false) {
             this.engine.trottleDownToZero(0.1);
             this.braking = 5;
@@ -550,9 +593,9 @@ function Car() {
         } else {
             this.engine.trottleDown(val);
         }
-    };
+    }
 
-    this.brake = function (power) {
+    public brake(power: any) {
         if (power == 0) {
             return false;
         }
@@ -562,32 +605,32 @@ function Car() {
         if (this.vforward < 0.001) {
             this.vforward = 0;
         }
-    };
+    }
 
-    this.getPosition = function (relX, relY) {
+    public getPosition(relX: any, relY: any) {
         this.alpha = this.heading;
         /*
     this.componentAlpha = Math.PI - this.alpha - Math.atan(relX / relY)
      this.component = Math.cos(this.componentAlpha)*relY
     //Calculate the coordinates of the front and back of the car :)
-    return( new Coord( this.xpos + Math.cos(this.componentAlpha)*this.component, this.ypos + Math.sin(this.componentAlpha)*this.component));		
+    return( new Coord( this.xpos + Math.cos(this.componentAlpha)*this.component, this.ypos + Math.sin(this.componentAlpha)*this.component));
     */
         return new Coord(
             this.xpos + relY * Math.cos(-this.alpha) - relX * Math.sin(-this.alpha),
             this.ypos + relY * Math.sin(-this.alpha) + relX * Math.cos(-this.alpha)
         );
-    };
+    }
 
-    this.setPositionFromBack = function (ack, ackDist, distance) {
+    public setPositionFromBack(ack: any, ackDist: any, distance: any) {
         //ack.x = ack.x - this.backCoord.x;
         //ack.y = ack.y - this.backCoord.y;
 
-        var ackToBackDistance = ackDist;
+        const ackToBackDistance = ackDist;
         //Distance Back to center =
-        var dBackCenter = this.steering.centerOfBackWheels;
+        const dBackCenter = this.steering.centerOfBackWheels;
         //Distance back to ack center
         //= ackToBackDistance
-        var dCenterAck = Math.sqrt(dBackCenter * dBackCenter + ackToBackDistance * ackToBackDistance);
+        const dCenterAck = Math.sqrt(dBackCenter * dBackCenter + ackToBackDistance * ackToBackDistance);
         //	rotation = this.heading + rotation
         //console.log( dCenterAck*Math.sin(rotation), dCenterAck*Math.cos(rotation)-this.width)
         //New coordinates are:
@@ -596,12 +639,13 @@ function Car() {
 
         this.backWheelsPosition = this.getPosition(this.steering.centerOfBackWheels, 0);
 
-        var x = this.xpos - ack.x;
-        var y = this.ypos - ack.y;
+        const x = this.xpos - ack.x;
+        const y = this.ypos - ack.y;
 
-        var A = Math.atan2(x, y);
+        const A = Math.atan2(x, y);
         //distance
 
+        let angularSpeed;
         if (ackDist < 0) {
             angularSpeed = -(distance / (Math.PI * 2.0 * this.dCenterAck)) * Math.PI * 2;
         } else {
@@ -616,12 +660,9 @@ function Car() {
 
         //console.log(dCenterAck*Math.cos(rotation))
         //this.ypos += dCenterAck*Math.cos(rotation)
-    };
+    }
 
-    this.frontCoord = new Coord(this.x, this.y);
-    this.backCoord = new Coord(this.x, this.y);
-
-    this.tick = function () {
+    public tick() {
         if (this.reverse == true && this.vforward > 0.01) {
             this.reverse = false;
         }
@@ -633,8 +674,8 @@ function Car() {
         //this.steering.reduce();
         this.alpha = this.heading;
         //Calculate the coordinates of the front and back of the car :)
-        xOffset = Math.sin(this.alpha) * 0.5 * this.length;
-        yOffset = Math.cos(this.alpha) * 0.5 * this.length;
+        let xOffset = Math.sin(this.alpha) * 0.5 * this.length;
+        let yOffset = Math.cos(this.alpha) * 0.5 * this.length;
 
         this.frontCoord.x = xOffset + this.xpos;
         this.frontCoord.y = yOffset + this.ypos;
@@ -642,14 +683,14 @@ function Car() {
         this.backCoord.y = this.ypos - yOffset;
 
         this.engine.tick();
-        var f = this.engine.getForce();
+        const f = this.engine.getForce();
 
         this.vforward += f;
         this.vforward *= this.friction;
 
-        var r = this.steering.steerDist;
+        const r = this.steering.steerDist;
         if (Math.abs(r) > 0 && Math.abs(r) < 1000) {
-            var ackerAlphaMovement = Math.asin((0.5 * this.vforward) / r) / 2;
+            const ackerAlphaMovement = Math.asin((0.5 * this.vforward) / r) / 2;
 
             this.dxAcker = r * Math.sin(ackerAlphaMovement) - r * Math.sin(0);
             this.dyAcker = r * Math.cos(ackerAlphaMovement) - r * Math.cos(0);
@@ -658,11 +699,11 @@ function Car() {
             //this.xpos += this.dxAcker
             //this.ypos += this.dyAcker
 
-            if (iterations % 10 == 0) {
-                //console.log(this.steering.getRelativeAckermanPos())
-                //console.log(this.vforward)
-                //console.log(this.dyAcker, this.dxAcker)
-            }
+            // if (iterations % 10 == 0) {
+            //console.log(this.steering.getRelativeAckermanPos())
+            //console.log(this.vforward)
+            //console.log(this.dyAcker, this.dxAcker)
+            // }
         } else {
             this.xpos += this.vforward * Math.sin(this.heading);
             this.ypos += this.vforward * Math.cos(this.heading);
@@ -683,32 +724,53 @@ function Car() {
         } else {
             this.blinkersReset();
         }
-    };
-    this.tick();
+    }
 }
 
-function getShortAngle(a1, a2) {
+function getShortAngle(a1: any, a2: any) {
     return Math.cos(a1 - a2 + Math.PI / 2);
 }
 
-function Driver(car) {
-    this.car = car;
+export class Driver {
+    public car: any;
     //this.driveRoute = [new DriveRoutePoint(300,300), new DriveRoutePoint(100,300), new DriveRoutePoint(100,100), new DriveRoutePoint(300,300)  ]
-    this.driveRoute = [new DriveRoutePoint(300, 300)];
+    public driveRoute: any;
 
-    this.reachedTarget = true;
-    this.breakOnEnd = false;
+    public reachedTarget = true;
+    public breakOnEnd = false;
 
-    this.breakingDistance = 300; //30
-    this.slowSpeed = 0.3;
-    this.normalSpeed = 5;
-    this.targetReachedDistance = 170; //15
+    public breakingDistance = 300; //30
+    public slowSpeed = 0.3;
+    public normalSpeed = 5;
+    public targetReachedDistance = 170; //15
+    public currentTarget: any;
+    public headingToTarget: any;
+    public headingDelta: any;
+    public distanceToTarget: any;
+    public steeringDelta: any;
+    public steeringCorrection: any;
+    public sharpestSteeringCorrection: any;
+    public brakeOnEnd: any;
+    constructor(car: any) {
+        this.car = car;
+        //this.driveRoute = [new DriveRoutePoint(300,300), new DriveRoutePoint(100,300), new DriveRoutePoint(100,100), new DriveRoutePoint(300,300)  ]
+        this.driveRoute = [new DriveRoutePoint(300, 300)];
 
-    this.chooseTurnAround = function () {
+        this.reachedTarget = true;
+        this.breakOnEnd = false;
+
+        this.breakingDistance = 300; //30
+        this.slowSpeed = 0.3;
+        this.normalSpeed = 5;
+        this.targetReachedDistance = 170; //15
+        this.gotoNextTarget();
+    }
+
+    public chooseTurnAround() {
         //
-    };
+    }
 
-    this.tick = function () {
+    public tick() {
         if (this.reachedTarget == true) {
             if (this.car.vforward > 0) {
                 this.car.engine.setTrottle(0);
@@ -790,14 +852,14 @@ function Driver(car) {
 
         this.car.steering.increment(this.steeringCorrection);
         //}
-    };
+    }
 
-    this.popNextTarget = function () {
+    public popNextTarget() {
         return this.driveRoute.shift();
-    };
+    }
 
-    this.gotoNextTarget = function () {
-        var target = this.popNextTarget();
+    public gotoNextTarget(isFinal?: any) {
+        const target = this.popNextTarget();
         if (target) {
             this.currentTarget = target;
             this.reachedTarget = false;
@@ -808,15 +870,14 @@ function Driver(car) {
             }
             this.car.blinkersWarning();
         }
-    };
-    this.gotoNextTarget();
+    }
 
-    this.setTarget = function (coord) {
+    public setTarget(coord: any) {
         this.reachedTarget = false;
         this.currentTarget = coord;
-    };
+    }
 
-    this.render = function (env) {
+    public render(env: any) {
         env.lineWidth = 2;
         env.strokeStyle = "rgba(80,255,80,0.4)";
         env.beginPath();
@@ -828,10 +889,10 @@ function Driver(car) {
     env.font="20px Georgia";
     env.fillText(this.steeringDelta,this.car.xpos+30,this.car.ypos+30);
     */
-        for (var index in this.driveRoute) {
+        for (const index in this.driveRoute) {
             this.driveRoute[index].render(env);
         }
-    };
+    }
 }
 
 // function subdivideOver(xStart, yStart, xEnd, yEnd, minDistance) {
@@ -847,7 +908,7 @@ function Driver(car) {
 //     return coords;
 // }
 
-Wegmeubulair = {};
+const Wegmeubulair = {};
 
 Wegmeubulair.pylon = function (x, y, rotation) {
     this.xpos = x || 30;
@@ -948,7 +1009,7 @@ Wegmeubulair_pylonnen = function(xStart, yStart, xEnd, yEnd, distanceBetween){
 //     this.render = function () {};
 // }
 
-function Level() {
+export class Level {
     /*
 //w = new Wegmeubulair();
 this.objects = []
@@ -957,12 +1018,12 @@ this.objects = []
 this.objects.push(new Wegmeubulair_pylonnen(200,200,250,200, 20))
 this.objects.push(new Wegmeubulair_pylonnen(250,220,250,400, 20))
 */
-
-    this.render = function (env) {
-        for (var index in this.objects) {
+    public objects: any[] = [];
+    public render(env: any) {
+        for (const index in this.objects) {
             this.objects[index].render(env);
         }
-    };
+    }
 }
 
 EditorModi = {};
@@ -986,7 +1047,7 @@ EditorModi.array = function () {
     };
 };
 
-AvailableObjects = {
+const AvailableObjects = {
     Wegmeubulair: {
         name: "Wegmeubulair",
         contents: Wegmeubulair,
