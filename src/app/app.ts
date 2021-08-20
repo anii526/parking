@@ -1,25 +1,13 @@
+import { canvas, context } from "..";
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
-import { canvas, context } from ".";
-
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-export class App {
-    //
-}
 export class Coord {
-    constructor(public x = 0, public y = 0) {
-        this.x = x;
-        this.y = y;
-    }
+    constructor(public x = 0, public y = 0) {}
 }
 
 export class DriveRoutePoint {
-    constructor(public x = 0, public y = 0, public isFinal = false) {
-        this.x = x;
-        this.y = y;
-        this.isFinal = isFinal;
-    }
-    public render(env: any): void {
+    constructor(public x = 0, public y = 0, public isFinal = false) {}
+    public render(env: CanvasRenderingContext2D): void {
         env.fillStyle = "rgba(30,120,0,0.8)";
         env.rect(this.x - 5, this.y - 5, 10, 10);
         env.fill();
@@ -36,9 +24,6 @@ export class CanvasFunctions {
     };
 }
 
-(document as any).loadedImages = {
-    //
-};
 // function rotateAndPaintImage(context, image, angleInRad, positionX, positionY, axisX, axisY) {
 //     context.translate(positionX, positionY);
 //     context.rotate(angleInRad);
@@ -59,7 +44,7 @@ y 	The y coordinate where to place the image on the canvas 	Play it �
 width 	Optional. The width of the image to use (stretch or reduce the image) 	Play it �	
 height 	Optional. The height of the image to use (stretch or reduce the image)
 */
-function LoadImageToCanvas(
+export function LoadImageToCanvas(
     env: any,
     imageObj: any,
     positionX: any,
@@ -120,7 +105,7 @@ export class Wheel {
         this.rotateTo(value);
     }
 
-    public render(env: any) {
+    public render(env: CanvasRenderingContext2D) {
         env.lineWidth = 5;
         env.strokeStyle = "#222222";
         this.alpha = this.heading + this.parent.heading;
@@ -301,7 +286,7 @@ export class Wheels {
         }
         //Anckerman center:
     }
-    public render(env: any) {
+    public render(env: CanvasRenderingContext2D) {
         //Do not draw debug:
         //return(true)
 
@@ -455,7 +440,7 @@ export class Car {
         this.blinkers = 2;
     }
 
-    public render(env: any) {
+    public render(env: CanvasRenderingContext2D) {
         for (const index in this.wheels) {
             this.wheels[index].render(env);
         }
@@ -679,7 +664,7 @@ export class Car {
     }
 }
 
-function getShortAngle(a1: any, a2: any) {
+export function getShortAngle(a1: any, a2: any) {
     return Math.cos(a1 - a2 + Math.PI / 2);
 }
 
@@ -822,7 +807,7 @@ export class Driver {
         this.currentTarget = coord;
     }
 
-    public render(env: any) {
+    public render(env: CanvasRenderingContext2D) {
         env.lineWidth = 2;
         env.strokeStyle = "rgba(80,255,80,0.4)";
         env.beginPath();
@@ -832,61 +817,6 @@ export class Driver {
 
         for (const index in this.driveRoute) {
             this.driveRoute[index].render(env);
-        }
-    }
-}
-
-export class Pylon {
-    public xpos: any;
-    public ypos: any;
-    public rotation: any;
-    constructor(x?: any, y?: any, rotation?: any) {
-        this.xpos = x || 30;
-        this.ypos = y || 30;
-        this.rotation = rotation | 0;
-    }
-    public render(env: any) {
-        env.strokeStyle = "#AA0000";
-        env.lineWidth = 2;
-        env.beginPath();
-        env.rect(this.xpos - 3.0, this.ypos - 3.0, 6, 6);
-        env.stroke();
-    }
-    public tick = function () {
-        //
-    };
-}
-
-export class Tarmac10 {
-    public xpos: any;
-    public ypos: any;
-    public rotation: any;
-    constructor(x?: any, y?: any, rotation?: any) {
-        this.xpos = x || 10;
-        this.ypos = y || 10;
-        this.rotation = rotation | 0;
-    }
-    public render(env: any) {
-        env.strokeStyle = "#AA0000";
-        env.lineWidth = 2;
-        env.beginPath();
-        env.rect(this.xpos - 3.0, this.ypos - 3.0, 6, 6);
-        env.stroke();
-    }
-    public tick() {
-        this.xpos += 0.01;
-    }
-}
-export const Wegmeubulair = {
-    pylon: new Pylon(),
-    tarmac10: new Tarmac10(),
-};
-
-export class Level {
-    public objects: any[] = [];
-    public render(env: any) {
-        for (const index in this.objects) {
-            this.objects[index].render(env);
         }
     }
 }
@@ -954,7 +884,7 @@ export class World {
         this.render(tickEnd - tickStart);
     }
 
-    public render(tickTime: any) {
+    public render(tickTime: number) {
         const date = new Date();
         const frameStart = date.getMilliseconds();
         //Empty the canvas
