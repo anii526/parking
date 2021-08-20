@@ -152,7 +152,7 @@ export class CarEngine {
         this.power = 0;
         this.trottle = 0;
     }
-    public setTrottle(amount: any) {
+    public setTrottle(amount: number) {
         this.trottle = amount;
         this.update();
     }
@@ -163,7 +163,7 @@ export class CarEngine {
             this.power = this.maxPowerInReverse * this.trottle;
         }
     }
-    public trottleUp(amount: any) {
+    public trottleUp(amount: number) {
         if (this.trottle + amount <= 1) {
             this.trottle += amount;
         } else {
@@ -171,7 +171,7 @@ export class CarEngine {
         }
         this.update();
     }
-    public trottleDown(amount: any) {
+    public trottleDown(amount: number) {
         if (this.trottle - amount >= 0) {
             this.trottle -= amount;
         } else {
@@ -181,7 +181,7 @@ export class CarEngine {
         }
         this.update();
     }
-    public trottleDownToZero(amount: any) {
+    public trottleDownToZero(amount: number) {
         if (this.trottle - amount >= 0) {
             this.trottle -= amount;
         } else {
@@ -203,30 +203,31 @@ export class CarEngine {
 
 export class Wheels {
     public mindrivingCircle: number;
-    public frontWheels: any[];
-    public backWheels: any[];
+    public frontWheels: Wheel[];
+    public backWheels: Wheel[];
     public steerDist: number;
-    public parent: any;
-    public steerAngle: any;
-    public centerOfBackWheels: any;
-    constructor(parent: any) {
+    public parent: Car;
+    public steerAngle: number;
+    public centerOfBackWheels: number;
+    constructor(parent: Car) {
         this.mindrivingCircle = 80;
         this.frontWheels = [];
         this.backWheels = [];
         this.steerDist = 0;
         this.parent = parent;
         this.steerAngle = 0.5 * Math.PI;
+        this.centerOfBackWheels = 0;
     }
-    public addFrontWheel(wheel: any) {
+    public addFrontWheel(wheel: Wheel) {
         this.frontWheels.push(wheel);
         this.update();
     }
 
-    public addBackWheel(wheel: any) {
+    public addBackWheel(wheel: Wheel) {
         this.backWheels.push(wheel);
         this.update();
     }
-    public steerToDist(dist: any) {
+    public steerToDist(dist: number) {
         this.steerDist = dist;
         for (const index in this.frontWheels) {
             const targetAngle = Math.atan(
@@ -236,8 +237,8 @@ export class Wheels {
             this.frontWheels[index].rotateTo(targetAngle);
         }
     }
-    public increment(val: any) {
-        let newSteerAngle: any;
+    public increment(val: number) {
+        let newSteerAngle: number;
         if (this.steerAngle + val > Math.PI) {
             newSteerAngle = -this.steerAngle + val;
         } else {
@@ -252,7 +253,7 @@ export class Wheels {
     }
 
     //reduce to zero
-    public reduce(val: any) {
+    public reduce(val: number) {
         val = val || 1.05;
 
         if (Math.abs(this.steerDist * val) <= 1100) {
@@ -260,7 +261,7 @@ export class Wheels {
             this.steerToDist(this.steerDist);
         }
     }
-    public incrementDistance(val: any) {
+    public incrementDistance(val: number) {
         this.steerDist += val;
         this.steerToDist(this.steerDist);
     }
