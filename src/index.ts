@@ -1,4 +1,4 @@
-import { CanvasFunctions, Car, Driver, DriveRoutePoint, World } from "./app";
+import { CanvasFunctions, Car, Driver, DriveRoutePoint, World } from "./app/app";
 import "core-js";
 import "./style.css";
 
@@ -9,11 +9,11 @@ const $ = require("jquery");
 
 console.log("hello world");
 
-export let canvas: any;
-export let context: any;
+export let canvas: HTMLCanvasElement;
+export let context: CanvasRenderingContext2D;
 $(document).ready(() => {
-    canvas = document.getElementById("sim") as any;
-    const ctx = (canvas as any).getContext("2d");
+    canvas = document.getElementById("sim") as HTMLCanvasElement;
+    const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
     context = ctx;
     const car = new Car();
     const world = new World();
