@@ -1,7 +1,7 @@
 import { App } from "./app";
 import "core-js";
 import "./style.css";
-import "./voorrang.js";
+// import "./voorrang.js";
 
 console.log("hello world");
 

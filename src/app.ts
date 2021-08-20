@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const $ = require("jquery");
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 export class App {
@@ -115,7 +117,6 @@ export class Wheel {
 
     public increment(value: any) {
         this.rotateTo(value);
-        //this.rotateTo( Math.max( Math.min(this.heading + value, this.maxAngle), this.minAngle))
     }
 
     public render(env: any) {
@@ -270,14 +271,11 @@ export class Wheels {
             this.steerAngle = newSteerAngle;
             this.steerToDist(ackDistance);
         }
-        //Angle of steer to ackerman distance:
     }
 
     //reduce to zero
     public reduce(val: any) {
         val = val || 1.05;
-
-        //this.steerAngle = Math.atan(this.steerDist)/100
 
         if (Math.abs(this.steerDist * val) <= 1100) {
             this.steerDist *= val;
@@ -311,7 +309,6 @@ export class Wheels {
             const ackermanCenter = this.getAckermanpos();
 
             env.beginPath();
-            //console.log(this.getAckermanRadius())
             env.arc(ackermanCenter.x, ackermanCenter.y, 2, 0, 2 * Math.PI, false);
             env.stroke();
 
@@ -325,7 +322,6 @@ export class Wheels {
             }
 
             env.beginPath();
-            //console.log(this.getAckermanRadius())
             env.arc(anckermanPos.x, anckermanPos.y, this.getAckermanRadius(), 0, 2 * Math.PI, false);
             env.stroke();
         }
@@ -419,19 +415,12 @@ export class Car {
         this.leftFrontWheel = new Wheel(-(this.width / 2), this.height / 3, this);
         this.rightFrontWheel = new Wheel(this.width / 2, this.height / 3, this);
 
-        //this.midLeftFrontWheel = new Wheel(-(this.width/2), this.height/6, this)
-        //this.midRightFrontWheel = new Wheel((this.width/2), this.height/6, this)
-
-        //this.leftFrontWheel.bindTo(this.rightFrontWheel)
         this.leftBackWheel = new Wheel(-(this.width / 2), -(this.height / 3), this);
         this.rightBackWheel = new Wheel(this.width / 2, -(this.height / 3), this);
         this.wheels = [this.leftFrontWheel, this.rightFrontWheel, this.leftBackWheel, this.rightBackWheel];
         this.steering = new Wheels(this);
         this.steering.addFrontWheel(this.leftFrontWheel);
         this.steering.addFrontWheel(this.rightFrontWheel);
-
-        //this.steering.addFrontWheel(this.midLeftFrontWheel);
-        //this.steering.addFrontWheel(this.midRightFrontWheel);
 
         this.steering.addBackWheel(this.leftBackWheel);
         this.steering.addBackWheel(this.rightBackWheel);
@@ -443,7 +432,6 @@ export class Car {
     }
 
     public steerIncrement(increment: any) {
-        //this.leftFrontWheel.increment(increment);
         this.steering.increment(increment);
     }
 
@@ -478,22 +466,6 @@ export class Car {
         env.lineTo(this.backCoord.x, this.backCoord.y);
         env.stroke();
 
-        /*
-    env.strokeStyle = "#2222FF";
-    env.lineWidth = 1
-    env.beginPath();
-    //console.log(this.getAckermanRadius())
-    ack = this.steering.getAckermanpos()
-    env.arc(ack.x, ack.y, this.dCenterAck, 0, 2*Math.PI, false)
-    env.stroke()*/
-
-        /*
-    env.lineWidth =2
-    env.strokeStyle = "#FF2222";
-    env.beginPath();
-          env.moveTo(this.xpos, this.ypos);
-          env.lineTo(this.targetX, this.targetY);
-          env.stroke();*/
         this.steering.render(env);
 
         if (this.imageLoaded) {
@@ -609,12 +581,6 @@ export class Car {
 
     public getPosition(relX: any, relY: any) {
         this.alpha = this.heading;
-        /*
-    this.componentAlpha = Math.PI - this.alpha - Math.atan(relX / relY)
-     this.component = Math.cos(this.componentAlpha)*relY
-    //Calculate the coordinates of the front and back of the car :)
-    return( new Coord( this.xpos + Math.cos(this.componentAlpha)*this.component, this.ypos + Math.sin(this.componentAlpha)*this.component));
-    */
         return new Coord(
             this.xpos + relY * Math.cos(-this.alpha) - relX * Math.sin(-this.alpha),
             this.ypos + relY * Math.sin(-this.alpha) + relX * Math.cos(-this.alpha)
@@ -622,9 +588,6 @@ export class Car {
     }
 
     public setPositionFromBack(ack: any, ackDist: any, distance: any) {
-        //ack.x = ack.x - this.backCoord.x;
-        //ack.y = ack.y - this.backCoord.y;
-
         const ackToBackDistance = ackDist;
         //Distance Back to center =
         const dBackCenter = this.steering.centerOfBackWheels;
@@ -657,9 +620,6 @@ export class Car {
 
         this.xpos = this.targetX;
         this.ypos = this.targetY;
-
-        //console.log(dCenterAck*Math.cos(rotation))
-        //this.ypos += dCenterAck*Math.cos(rotation)
     }
 
     public tick() {
@@ -695,15 +655,6 @@ export class Car {
             this.dxAcker = r * Math.sin(ackerAlphaMovement) - r * Math.sin(0);
             this.dyAcker = r * Math.cos(ackerAlphaMovement) - r * Math.cos(0);
             this.setPositionFromBack(this.steering.getAckermanpos(), r, this.vforward);
-
-            //this.xpos += this.dxAcker
-            //this.ypos += this.dyAcker
-
-            // if (iterations % 10 == 0) {
-            //console.log(this.steering.getRelativeAckermanPos())
-            //console.log(this.vforward)
-            //console.log(this.dyAcker, this.dxAcker)
-            // }
         } else {
             this.xpos += this.vforward * Math.sin(this.heading);
             this.ypos += this.vforward * Math.cos(this.heading);
@@ -733,7 +684,6 @@ function getShortAngle(a1: any, a2: any) {
 
 export class Driver {
     public car: any;
-    //this.driveRoute = [new DriveRoutePoint(300,300), new DriveRoutePoint(100,300), new DriveRoutePoint(100,100), new DriveRoutePoint(300,300)  ]
     public driveRoute: any;
 
     public reachedTarget = true;
@@ -753,7 +703,6 @@ export class Driver {
     public brakeOnEnd: any;
     constructor(car: any) {
         this.car = car;
-        //this.driveRoute = [new DriveRoutePoint(300,300), new DriveRoutePoint(100,300), new DriveRoutePoint(100,100), new DriveRoutePoint(300,300)  ]
         this.driveRoute = [new DriveRoutePoint(300, 300)];
 
         this.reachedTarget = true;
@@ -846,12 +795,7 @@ export class Driver {
             this.steeringCorrection = -this.sharpestSteeringCorrection;
         }
 
-        //if (Math.abs(this.steeringDelta)>2) {
-        //this.car.steering.increment(0.1)
-        //} else {
-
         this.car.steering.increment(this.steeringCorrection);
-        //}
     }
 
     public popNextTarget() {
@@ -885,139 +829,59 @@ export class Driver {
         env.lineTo(this.currentTarget.x, this.currentTarget.y);
         env.stroke();
 
-        /*
-    env.font="20px Georgia";
-    env.fillText(this.steeringDelta,this.car.xpos+30,this.car.ypos+30);
-    */
         for (const index in this.driveRoute) {
             this.driveRoute[index].render(env);
         }
     }
 }
 
-// function subdivideOver(xStart, yStart, xEnd, yEnd, minDistance) {
-//     var angle = Math.atan2(xEnd - xStart, yEnd - yStart);
-//     var distance = Math.sqrt(Math.pow(xEnd - xStart, 2) + Math.pow(yEnd - yStart, 2));
-//     // var amount = Math.floor(distance / minDistance);
-//     var coords = [];
-//     for (var d = 0; d < distance; d += minDistance) {
-//         //Precalc cos and sin to make this faster :)
-//         //console.log(d)
-//         coords.push(new Coord(xStart + Math.sin(angle) * d, yStart + Math.cos(angle) * d));
-//     }
-//     return coords;
-// }
-
-const Wegmeubulair = {};
-
-Wegmeubulair.pylon = function (x, y, rotation) {
-    this.xpos = x || 30;
-    this.ypos = y || 30;
-    this.rotation = rotation | 0;
-    console.log(x, y);
-    this.render = function (env) {
+export class Pylon {
+    public xpos: any;
+    public ypos: any;
+    public rotation: any;
+    constructor(x?: any, y?: any, rotation?: any) {
+        this.xpos = x || 30;
+        this.ypos = y || 30;
+        this.rotation = rotation | 0;
+    }
+    public render(env: any) {
         env.strokeStyle = "#AA0000";
         env.lineWidth = 2;
         env.beginPath();
         env.rect(this.xpos - 3.0, this.ypos - 3.0, 6, 6);
         env.stroke();
-    };
-    this.tick = function () {
+    }
+    public tick = function () {
         //
     };
-};
+}
 
-Wegmeubulair.tarmac10 = function (x, y, rotation) {
-    this.xpos = x || 10;
-    this.ypos = y || 10;
-    this.rotation = rotation | 0;
-    console.log(x, y);
-    this.render = function (env) {
+export class Tarmac10 {
+    public xpos: any;
+    public ypos: any;
+    public rotation: any;
+    constructor(x?: any, y?: any, rotation?: any) {
+        this.xpos = x || 10;
+        this.ypos = y || 10;
+        this.rotation = rotation | 0;
+    }
+    public render(env: any) {
         env.strokeStyle = "#AA0000";
         env.lineWidth = 2;
         env.beginPath();
         env.rect(this.xpos - 3.0, this.ypos - 3.0, 6, 6);
         env.stroke();
-    };
-    this.tick = function () {
+    }
+    public tick() {
         this.xpos += 0.01;
-    };
+    }
+}
+export const Wegmeubulair = {
+    pylon: new Pylon(),
+    tarmac10: new Tarmac10(),
 };
 
-/*
-Wegmeubulair_pylonnen = function(xStart, yStart, xEnd, yEnd, distanceBetween){		
-    this.xStart = xStart;
-    this.yStart = yStart;
-    this.xEnd = xEnd;
-    this.yEnd = yEnd;
-    this.pylonPositions = subdivideOver(xStart, yStart, xEnd, yEnd, distanceBetween)		
-    this.render = function(env){
-        env.strokeStyle = "#AA0000";
-        env.lineWidth=2;
-        for(var i in this.pylonPositions){
-            env.beginPath();			
-            env.rect(this.pylonPositions[i].x-3,this.pylonPositions[i].y-3,6,6);
-            env.stroke();
-        }			
-
-
-    }	
-    
-
-}
-
-*/
-
-// function RoutePoint(x, y, id) {
-//     this.id = id || "unset";
-//     this.position = new Coord(x, y);
-//     this.render = function (env) {
-//         env.strokeStyle = "#666666";
-//         env.fillStyle = "#666666";
-//         env.lineWidth = 1;
-//         env.beginPath();
-//         //console.log(this.getAckermanRadius())
-//         env.arc(this.position.x, this.position.y, 3, 0, 2 * Math.PI, false);
-//         env.stroke();
-//         env.fill();
-//     };
-//     this.setId = function (id) {
-//         this.id = id;
-//     };
-// }
-
-// function Route(id) {
-//     this.points = {};
-//     this.id = id;
-//     this.pointIdPosition = 0;
-//     this.addPoint = function (routePoint) {
-//         this.points[this.pointIdPosition] = routePoint;
-//         this.pointIdPosition++;
-//     };
-// }
-
-// function Routes() {
-//     //
-// }
-
-// function RoadSection(id) {
-//     this.width = 200;
-//     this.height = 200;
-
-//     this.tick = function () {};
-
-//     this.render = function () {};
-// }
-
 export class Level {
-    /*
-//w = new Wegmeubulair();
-this.objects = []
-
-//Vak:
-this.objects.push(new Wegmeubulair_pylonnen(200,200,250,200, 20))
-this.objects.push(new Wegmeubulair_pylonnen(250,220,250,400, 20))
-*/
     public objects: any[] = [];
     public render(env: any) {
         for (const index in this.objects) {
@@ -1026,146 +890,42 @@ this.objects.push(new Wegmeubulair_pylonnen(250,220,250,400, 20))
     }
 }
 
-EditorModi = {};
-EditorModi.array = function () {
-    this.pointA = Coord();
-    this.pointB = Coord();
+export class World {
+    public translateX: any;
+    public translateY: any;
+    public viewCenterX: any;
+    public viewCenterY: any;
+    public targetFrameTime: any;
+    public maxParticles: any;
+    public objects: any;
+    public particles: any;
+    public recalculateWorld: any;
+    public minX: any;
+    public maxX: any;
+    public minY: any;
+    public maxY: any;
+    constructor() {
+        this.translateX = 0;
+        this.translateY = 0;
+        this.viewCenterX = canvas.width / 2;
+        this.viewCenterY = canvas.height / 2;
+        this.targetFrameTime = 40; //Time in milisec per frame, to set FPS to 60 = 1000/60 => 16.6, 24 fps => 41
 
-    this.render = function () {
-        //
-    };
+        this.maxParticles = 10000;
+        this.objects = [];
+        this.particles = [];
+        this.recalculateWorld = false;
+    }
 
-    this.leftClick = function (position, n) {
-        if (n == 0) {
-            this.pointA.x = position.x;
-            this.pointA.y = position.y;
-        }
-        if (n == 1) {
-            this.pointB.x = position.x;
-            this.pointB.y = position.y;
-        }
-    };
-};
-
-const AvailableObjects = {
-    Wegmeubulair: {
-        name: "Wegmeubulair",
-        contents: Wegmeubulair,
-    },
-};
-
-// function Editor(appendTo, canvii) {
-//     $(appendTo).append('<div id="editor"></div>');
-
-//     this.modi = ["place", "place_array"];
-//     this.modus = "place_array";
-
-//     //Array tool:
-//     this.pointA = new Coord();
-//     this.pointB = new Coord();
-//     this.timesClicked = 0;
-
-//     this.processArrayToolClick = function (x, y) {
-//         if (this.selectedCatalogObject == undefined) {
-//             this.timesClicked = 0;
-//             return 0;
-//         }
-
-//         this.timesClicked++;
-//         if (this.timesClicked == 1) {
-//             console.log(this);
-//             this.pointA.x = x;
-//             this.pointA.y = y;
-//         }
-//         if (this.timesClicked == 2) {
-//             this.pointB.x = x;
-//             this.pointB.y = y;
-
-//             var points = subdivideOver(this.pointA.x, this.pointA.y, this.pointB.x, this.pointB.y, 25);
-//             for (var index in points) {
-//                 world.addObject(new this.selectedCatalogObject(points[index].x, points[index].y));
-//             }
-//             this.timesClicked = 0;
-//         }
-//     };
-
-//     this.mouseDown = function (x, y) {
-//         if (this.modus == "place") {
-//             world.addObject(new this.selectedCatalogObject(x, y));
-//         }
-
-//         if (this.modus == "place_array") {
-//             this.processArrayToolClick(x, y);
-//         }
-//     };
-
-//     this.drawCatalog = function () {
-//         this.html = "";
-//         for (var groupId in AvailableObjects) {
-//             this.html += '<div class="editorCatalogGroup"><h3>' + AvailableObjects[groupId].name + "</h3>";
-
-//             for (var objectId in AvailableObjects[groupId].contents) {
-//                 this.html +=
-//                     '<div class="editorCatalogObject" id="' +
-//                     groupId +
-//                     "_" +
-//                     objectId +
-//                     '">' +
-//                     objectId +
-//                     '<canvas id="canvas_' +
-//                     groupId +
-//                     "_" +
-//                     objectId +
-//                     '">width="75px" height="75px"></canvas></div>';
-//             }
-//             this.html += "</div>";
-//         }
-//         $("#editor").html(this.html);
-
-//         for (var groupId in AvailableObjects) {
-//             for (var objectId in AvailableObjects[groupId].contents) {
-//                 var canvasContext = document.getElementById("canvas_" + groupId + "_" + objectId).getContext("2d");
-//                 var o = new AvailableObjects[groupId].contents[objectId]();
-//                 o.render(canvasContext);
-//             }
-//         }
-
-//         $(".editorCatalogObject").on("click", function (e, i) {
-//             document.editor.setSelectedCatalogObject(e.currentTarget.id);
-//         });
-
-//         this.selectedCatalogObject = false;
-//         this.setSelectedCatalogObject = function (id) {
-//             var parts = id.split("_");
-//             this.selectedCatalogObject = AvailableObjects[parts[0]].contents[parts[1]];
-//             console.log("Selected " + id + " from the catalog");
-//         };
-//     };
-
-//     this.drawCatalog();
-// }
-
-function World() {
-    this.translateX = 0;
-    this.translateY = 0;
-    this.viewCenterX = canvas.width / 2;
-    this.viewCenterY = canvas.height / 2;
-    this.targetFrameTime = 40; //Time in milisec per frame, to set FPS to 60 = 1000/60 => 16.6, 24 fps => 41
-
-    this.maxParticles = 10000;
-    this.objects = [];
-    this.particles = [];
-    this.recalculateWorld = false;
-
-    this.tick = function () {
-        var date = new Date();
-        var tickStart = date.getMilliseconds();
+    public tick() {
+        let date = new Date();
+        const tickStart = date.getMilliseconds();
 
         //Recalculate all object id's
         if (this.recalculateWorld) {
-            var newObjects = [];
-            var pointer = 0;
-            for (var objectIndex in this.objects) {
+            const newObjects = [];
+            let pointer = 0;
+            for (const objectIndex in this.objects) {
                 if (this.objects[objectIndex] != null) {
                     newObjects.push(this.objects[objectIndex]);
                     this.objects[objectIndex].worldId = pointer;
@@ -1175,27 +935,27 @@ function World() {
             this.objects = newObjects;
         }
 
-        for (var objectIndex in this.objects) {
+        for (const objectIndex in this.objects) {
             if (this.objects[objectIndex] != null) {
                 this.objects[objectIndex].tick();
             }
         }
 
-        for (var particleIndex in this.particles) {
-            if (this.objects[objectIndex] != null) {
+        for (const particleIndex in this.particles) {
+            if (this.objects[particleIndex] != null) {
                 this.particles[particleIndex].tick();
             }
         }
 
-        var date = new Date();
-        var tickEnd = date.getMilliseconds();
+        date = new Date();
+        const tickEnd = date.getMilliseconds();
 
         this.render(tickEnd - tickStart);
-    };
+    }
 
-    this.render = function (tickTime) {
-        var date = new Date();
-        var frameStart = date.getMilliseconds();
+    public render(tickTime: any) {
+        const date = new Date();
+        const frameStart = date.getMilliseconds();
         //Empty the canvas
         context.clearRect(-10000, -10000, 10000 * canvas.width, 10000 * canvas.height);
         context.translate(this.translateX, this.translateY);
@@ -1214,113 +974,113 @@ function World() {
         context.lineWidth = 1;
         context.strokeStyle = "#DDDDDD";
 
-        var cellSize = 100;
+        const cellSize = 100;
 
-        for (var y = this.minY - (this.viewCenterY % cellSize); y < this.maxY; y += cellSize) {
+        for (let y = this.minY - (this.viewCenterY % cellSize); y < this.maxY; y += cellSize) {
             context.beginPath();
             context.moveTo(this.minX, y);
             context.lineTo(this.maxX, y);
             context.stroke();
         }
 
-        for (var x = this.minX - (this.viewCenterX % cellSize); x < this.maxX; x += cellSize) {
+        for (let x = this.minX - (this.viewCenterX % cellSize); x < this.maxX; x += cellSize) {
             context.beginPath();
             context.moveTo(x, this.minY);
             context.lineTo(x, this.maxY);
             context.stroke();
         }
 
-        for (var particleIndex in this.particles) {
+        for (const particleIndex in this.particles) {
             if (this.particles[particleIndex] != null) {
                 this.particles[particleIndex].render();
             }
         }
 
-        for (var objectIndex in this.objects) {
+        for (const objectIndex in this.objects) {
             if (this.objects[objectIndex] != null) {
                 this.objects[objectIndex].render(context);
             }
         }
 
-        var endDate = new Date();
-        var frameStop = endDate.getMilliseconds();
-        var frameTime = frameStop - frameStart;
+        const endDate = new Date();
+        const frameStop = endDate.getMilliseconds();
+        const frameTime = frameStop - frameStart;
         //context.font="30px Arial";
         //context.fillText(frameTime + " / " + tickTime,playerOrganism.physics.xpos, playerOrganism.physics.ypos);
 
-        self = this;
-        var timeout = this.targetFrameTime - frameTime - tickTime;
+        const timeout = this.targetFrameTime - frameTime - tickTime;
         if (timeout <= 0 || timeout > this.targetFrameTime) {
-            setTimeout(function () {
-                self.tick();
+            setTimeout(() => {
+                this.tick();
             }, 1);
         } else {
-            setTimeout(function () {
-                self.tick();
+            setTimeout(() => {
+                this.tick();
             }, timeout);
         }
-    };
+    }
 
-    this.addParticle = function (particle) {
+    public addParticle(particle: any) {
         this.particles.push(particle);
         if (this.particles.length - 1 >= this.maxParticles) {
             this.particles.shift();
         }
-    };
+    }
 
-    this.addObject = function (objectToAdd) {
+    public addObject(objectToAdd: any) {
         this.objects.push(objectToAdd);
         objectToAdd.worldId = this.objects.length - 1;
-    };
+    }
 
-    this.removeObject = function (id) {
+    public removeObject(id: any) {
         this.recalculateWorld = true;
         this.objects[id] = null;
-    };
+    }
 }
-
-$(document).ready(function () {
-    canvas = document.getElementById("sim");
-    var ctx = canvas.getContext("2d");
+export let canvas: any;
+export let context: any;
+$(document).ready(() => {
+    canvas = document.getElementById("sim") as any;
+    const ctx = (canvas as any).getContext("2d");
     context = ctx;
     //document.editor = new Editor('.simWrapper')
-    car = new Car();
-    level = new Level();
-    world = new World();
+    const car = new Car();
+    const level = new Level();
+    const world = new World();
 
-    aiCar = new Car();
-    driver = new Driver(aiCar);
+    const aiCar = new Car();
+    const driver = new Driver(aiCar);
 
     world.addObject(aiCar);
     world.addObject(driver);
 
-    aiCar2 = new Car();
-    driver2 = new Driver(aiCar2);
+    const aiCar2 = new Car();
+    const driver2 = new Driver(aiCar2);
     aiCar2.xpos = 0;
     aiCar2.ypos = 0;
 
     world.addObject(aiCar2);
     world.addObject(driver2);
 
-    canvas.addEventListener("mousemove", function (evt) {
-        var mousePos = CanvasFunctions.getMousePos(canvas, evt);
+    canvas.addEventListener("mousemove", (evt: any) => {
+        const mousePos = CanvasFunctions.getMousePos(canvas, evt);
 
-        var mouseX = world.viewCenterX - canvas.width * 0.5 + mousePos.x;
-        var mouseY = world.viewCenterY - canvas.height * 0.5 + mousePos.y;
+        const mouseX = world.viewCenterX - canvas.width * 0.5 + mousePos.x;
+        const mouseY = world.viewCenterY - canvas.height * 0.5 + mousePos.y;
         context.rect(mouseX - 3, mouseY - 3, 3, 3);
         context.stroke();
     });
 
     canvas.addEventListener(
         "click",
-        function (evt) {
-            var mousePos = CanvasFunctions.getMousePos(canvas, evt);
+        (evt: any) => {
+            const mousePos = CanvasFunctions.getMousePos(canvas, evt);
 
-            mouseX = mousePos.x + world.viewCenterX - canvas.width * 0.5;
-            mouseY = mousePos.y + world.viewCenterY - canvas.height * 0.5;
+            const mouseX = mousePos.x + world.viewCenterX - canvas.width * 0.5;
+            const mouseY = mousePos.y + world.viewCenterY - canvas.height * 0.5;
 
             console.log(world.viewCenterX + ", " + canvas.width * 0.5);
-            var message = "Mouse position: " + mousePos.x + "," + mousePos.y + ":" + mouseX + ", " + mouseY;
+            const message = "Mouse position: " + mousePos.x + "," + mousePos.y + ":" + mouseX + ", " + mouseY;
             //document.editor.mouseDown(mouseX,mouseY)
 
             console.log(message);
@@ -1328,30 +1088,30 @@ $(document).ready(function () {
         false
     );
 
-    var pressedKeys = {};
+    const pressedKeys: any = {};
 
-    $(document).keydown(function (e) {
+    $(document).keydown((e: any) => {
         pressedKeys[e.keyCode] = true;
     });
 
-    $(document).keyup(function (e) {
+    $(document).keyup((e: any) => {
         delete pressedKeys[e.keyCode];
     });
 
-    iterations = 0;
-    testAngle = 0;
+    let iterations = 0;
+    const testAngle = 0;
     car.xpos = 300;
 
     world.addObject(car);
 
-    setTarget = false;
-    setInterval(function () {
+    let setTarget = false;
+    setInterval(() => {
         //ctx.clearRect(0,0,1000,1000);
 
         //Camera movement:
-        var distanceX = Math.abs(car.xpos - world.viewCenterX);
+        const distanceX = Math.abs(car.xpos - world.viewCenterX);
         if (distanceX > 4) {
-            var xspeed = 0.0004 * Math.pow(distanceX, 2);
+            const xspeed = 0.0004 * Math.pow(distanceX, 2);
             if (car.xpos > world.viewCenterX) {
                 world.translateX = -xspeed;
             }
@@ -1362,9 +1122,9 @@ $(document).ready(function () {
             world.translateX = 0;
         }
 
-        var distanceY = Math.abs(car.ypos - world.viewCenterY);
+        const distanceY = Math.abs(car.ypos - world.viewCenterY);
         if (distanceY > 4) {
-            var yspeed = 0.0003 * Math.pow(distanceY, 2);
+            const yspeed = 0.0003 * Math.pow(distanceY, 2);
             if (car.ypos > world.viewCenterY) {
                 world.translateY = -yspeed;
             }
@@ -1397,10 +1157,10 @@ $(document).ready(function () {
         }
 
         if (car.xpos && setTarget == false) {
-            driver2.setTarget(new DriveRoutePoint(aiCar.xpos, aiCar.ypos, 0));
+            driver2.setTarget(new DriveRoutePoint(aiCar.xpos, aiCar.ypos, false));
             driver2.reachedTarget = false;
 
-            driver.setTarget(new DriveRoutePoint(car.xpos, car.ypos, 0));
+            driver.setTarget(new DriveRoutePoint(car.xpos, car.ypos, false));
             driver.reachedTarget = false;
             setTarget = false;
         }
