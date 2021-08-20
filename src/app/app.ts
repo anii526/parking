@@ -15,7 +15,7 @@ export class DriveRoutePoint {
 }
 
 export class CanvasFunctions {
-    public static getMousePos = (canvas: any, evt: any) => {
+    public static getMousePos = (canvas: HTMLCanvasElement, evt: MouseEvent) => {
         const rect = canvas.getBoundingClientRect();
         return {
             x: evt.clientX - rect.left,
@@ -45,13 +45,13 @@ width 	Optional. The width of the image to use (stretch or reduce the image) 	Pl
 height 	Optional. The height of the image to use (stretch or reduce the image)
 */
 export function LoadImageToCanvas(
-    env: any,
-    imageObj: any,
-    positionX: any,
-    positionY: any,
-    angleInRad: any,
-    axisX: any,
-    axisY: any
+    env: CanvasRenderingContext2D,
+    imageObj: HTMLImageElement,
+    positionX: number,
+    positionY: number,
+    angleInRad: number,
+    axisX: number,
+    axisY: number
 ) {
     env.translate(positionX, positionY);
     env.rotate(angleInRad);
@@ -61,21 +61,20 @@ export function LoadImageToCanvas(
 }
 
 export class Wheel {
-    public parent: any;
-    public xoffset: any;
-    public yoffset: any;
+    public parent: Car;
+    public xoffset: number;
+    public yoffset: number;
     public length = 10;
     public maxAngle = Math.PI * 0.35;
     public minAngle = -Math.PI * 0.35;
 
     public heading = 0;
     public vr = 0; //Rotational speed
-    public boundTo: any[];
-    public frontCoord: any;
-    public backCoord: any;
-    public center: any;
+    public frontCoord: Coord;
+    public backCoord: Coord;
+    public center: Coord;
     public alpha = 1;
-    constructor(yoffset: any, xoffset: any, parent: any) {
+    constructor(yoffset: number, xoffset: number, parent: Car) {
         this.parent = parent;
         this.xoffset = xoffset;
         this.yoffset = yoffset;
@@ -85,23 +84,16 @@ export class Wheel {
 
         this.heading = 0;
         this.vr = 0; //Rotational speed
-        this.boundTo = [];
 
         this.frontCoord = new Coord();
         this.backCoord = new Coord();
         this.center = new Coord();
     }
-    public bindTo(obj: any) {
-        this.boundTo.push(obj);
-    }
-    public rotateTo(newHeading: any) {
+    public rotateTo(newHeading: number) {
         this.heading = newHeading;
-        for (const index in this.boundTo) {
-            this.boundTo[index].rotateTo(newHeading);
-        }
     }
 
-    public increment(value: any) {
+    public increment(value: number) {
         this.rotateTo(value);
     }
 
@@ -339,7 +331,7 @@ export class Car {
     public braking = 0;
     public imgUrl = "./assets/sports_car_grey.png";
 
-    public imageObj: any;
+    public imageObj: HTMLImageElement;
     public imageXoffset = 2;
     public imageYoffset = 5;
     public imageLoaded = false;

@@ -32,7 +32,7 @@ $(document).ready(() => {
     world.addObject(aiCar2);
     world.addObject(driver2);
 
-    canvas.addEventListener("mousemove", (evt: any) => {
+    canvas.addEventListener("mousemove", (evt: MouseEvent) => {
         const mousePos = CanvasFunctions.getMousePos(canvas, evt);
 
         const mouseX = world.viewCenterX - canvas.width * 0.5 + mousePos.x;
@@ -43,7 +43,7 @@ $(document).ready(() => {
 
     canvas.addEventListener(
         "click",
-        (evt: any) => {
+        (evt: MouseEvent) => {
             const mousePos = CanvasFunctions.getMousePos(canvas, evt);
 
             const mouseX = mousePos.x + world.viewCenterX - canvas.width * 0.5;
