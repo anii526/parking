@@ -326,7 +326,7 @@ export class Car {
     public blinkerIteration = 0;
 
     public vforward = 0;
-    public engine: any;
+    public engine: CarEngine;
     public reverse = false;
     public heading = 0;
     public braking = 0;
@@ -339,27 +339,27 @@ export class Car {
 
     //Following determines the car sizes (pixels):
     public height = 190 / 2;
-    public length: any;
+    public length: number;
     public width = 45;
 
-    public leftFrontWheel: any;
-    public rightFrontWheel: any;
+    public leftFrontWheel: Wheel;
+    public rightFrontWheel: Wheel;
 
-    public leftBackWheel: any;
-    public rightBackWheel: any;
-    public wheels: any[];
-    public steering: any;
-    public frontCoord: any;
-    public backCoord: any;
+    public leftBackWheel: Wheel;
+    public rightBackWheel: Wheel;
+    public wheels: Wheel[];
+    public steering: Wheels;
+    public frontCoord: Coord;
+    public backCoord: Coord;
     public alpha = 1;
     public x = 0;
     public y = 0;
-    public dCenterAck: any;
-    public backWheelsPosition: any;
-    public dxAcker: any;
-    public dyAcker: any;
-    public targetX: any;
-    public targetY: any;
+    public dCenterAck = 0;
+    public backWheelsPosition: Coord;
+    public dxAcker = 0;
+    public dyAcker = 0;
+    public targetX = 0;
+    public targetY = 0;
     constructor() {
         this.xpos = 100;
         this.ypos = 100;
@@ -407,10 +407,12 @@ export class Car {
         this.frontCoord = new Coord(this.x, this.y);
         this.backCoord = new Coord(this.x, this.y);
 
+        this.backWheelsPosition = new Coord();
+
         this.tick();
     }
 
-    public steerIncrement(increment: any) {
+    public steerIncrement(increment: number) {
         this.steering.increment(increment);
     }
 
@@ -534,7 +536,7 @@ export class Car {
         }
     }
 
-    public brakeReverse(val: any) {
+    public brakeReverse(val: number) {
         if (this.reverse == false) {
             this.engine.trottleDownToZero(0.1);
             this.braking = 5;
@@ -546,7 +548,7 @@ export class Car {
         }
     }
 
-    public brake(power: any) {
+    public brake(power: number) {
         if (power == 0) {
             return false;
         }
@@ -558,7 +560,7 @@ export class Car {
         }
     }
 
-    public getPosition(relX: any, relY: any) {
+    public getPosition(relX: number, relY: number) {
         this.alpha = this.heading;
         return new Coord(
             this.xpos + relY * Math.cos(-this.alpha) - relX * Math.sin(-this.alpha),
@@ -566,7 +568,7 @@ export class Car {
         );
     }
 
-    public setPositionFromBack(ack: any, ackDist: any, distance: any) {
+    public setPositionFromBack(ack: Coord, ackDist: number, distance: number) {
         const ackToBackDistance = ackDist;
         //Distance Back to center =
         const dBackCenter = this.steering.centerOfBackWheels;
@@ -657,7 +659,7 @@ export class Car {
     }
 }
 
-export function getShortAngle(a1: any, a2: any) {
+export function getShortAngle(a1: number, a2: number) {
     return Math.cos(a1 - a2 + Math.PI / 2);
 }
 
