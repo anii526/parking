@@ -1,7 +1,9 @@
-import { CanvasFunctions, Car, Driver, DriveRoutePoint } from "./app/app";
+import { CanvasFunctions, DriveRoutePoint } from "./app/app";
 import { World } from "./app/world";
 import "core-js";
 import "./style.css";
+import { Car } from "./app/car";
+import { Driver } from "./app/driver";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 

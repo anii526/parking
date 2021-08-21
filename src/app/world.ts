@@ -1,6 +1,7 @@
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { canvas, context } from "..";
-import { Car, Driver } from "./app";
+import { Car } from "./car";
+import { Driver } from "./driver";
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 export class World {
     public translateX: number;
     public translateY: number;
