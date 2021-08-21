@@ -1,4 +1,5 @@
-import { CanvasFunctions, Car, Driver, DriveRoutePoint, World } from "./app/app";
+import { CanvasFunctions, Car, Driver, DriveRoutePoint } from "./app/app";
+import { World } from "./app/world";
 import "core-js";
 import "./style.css";
 
