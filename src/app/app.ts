@@ -664,8 +664,8 @@ export function getShortAngle(a1: number, a2: number) {
 }
 
 export class Driver {
-    public car: any;
-    public driveRoute: any;
+    public car: Car;
+    public driveRoute: DriveRoutePoint[];
 
     public reachedTarget = true;
     public breakOnEnd = false;
@@ -674,15 +674,15 @@ export class Driver {
     public slowSpeed = 0.3;
     public normalSpeed = 5;
     public targetReachedDistance = 170; //15
-    public currentTarget: any;
-    public headingToTarget: any;
-    public headingDelta: any;
-    public distanceToTarget: any;
+    public currentTarget?: DriveRoutePoint;
+    public headingToTarget = 0;
+    public headingDelta = 0;
+    public distanceToTarget = 0;
     public steeringDelta: any;
     public steeringCorrection: any;
     public sharpestSteeringCorrection: any;
     public brakeOnEnd: any;
-    constructor(car: any) {
+    constructor(car: Car) {
         this.car = car;
         this.driveRoute = [new DriveRoutePoint(300, 300)];
 
@@ -713,16 +713,22 @@ export class Driver {
             return false;
         }
 
-        //Calculate desired heading to target:
-        this.headingToTarget = Math.atan2(this.currentTarget.x - this.car.xpos, this.currentTarget.y - this.car.ypos);
-
+        if (this.currentTarget) {
+            //Calculate desired heading to target:
+            this.headingToTarget = Math.atan2(
+                this.currentTarget.x - this.car.xpos,
+                this.currentTarget.y - this.car.ypos
+            );
+        }
         //Calculate the difference in heading:
         this.headingDelta = this.car.heading - this.headingToTarget;
 
-        //Calculate the distance to the target:
-        this.distanceToTarget = Math.sqrt(
-            Math.pow(this.car.xpos - this.currentTarget.x, 2) + Math.pow(this.car.ypos - this.currentTarget.y, 2)
-        );
+        if (this.currentTarget) {
+            //Calculate the distance to the target:
+            this.distanceToTarget = Math.sqrt(
+                Math.pow(this.car.xpos - this.currentTarget.x, 2) + Math.pow(this.car.ypos - this.currentTarget.y, 2)
+            );
+        }
 
         if (this.distanceToTarget <= this.targetReachedDistance) {
             this.reachedTarget = true;
@@ -797,7 +803,7 @@ export class Driver {
         }
     }
 
-    public setTarget(coord: any) {
+    public setTarget(coord: DriveRoutePoint) {
         this.reachedTarget = false;
         this.currentTarget = coord;
     }
@@ -807,7 +813,9 @@ export class Driver {
         env.strokeStyle = "rgba(80,255,80,0.4)";
         env.beginPath();
         env.moveTo(this.car.xpos, this.car.ypos);
-        env.lineTo(this.currentTarget.x, this.currentTarget.y);
+        if (this.currentTarget) {
+            env.lineTo(this.currentTarget.x, this.currentTarget.y);
+        }
         env.stroke();
 
         for (const index in this.driveRoute) {
