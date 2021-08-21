@@ -825,19 +825,18 @@ export class Driver {
 }
 
 export class World {
-    public translateX: any;
-    public translateY: any;
-    public viewCenterX: any;
-    public viewCenterY: any;
-    public targetFrameTime: any;
-    public maxParticles: any;
-    public objects: any;
-    public particles: any;
-    public recalculateWorld: any;
-    public minX: any;
-    public maxX: any;
-    public minY: any;
-    public maxY: any;
+    public translateX: number;
+    public translateY: number;
+    public viewCenterX: number;
+    public viewCenterY: number;
+    public targetFrameTime: number;
+    public maxParticles: number;
+    public objects: Array<Car | Driver>;
+    public recalculateWorld: boolean;
+    public minX = 0;
+    public maxX = 0;
+    public minY = 0;
+    public maxY = 0;
     constructor() {
         this.translateX = 0;
         this.translateY = 0;
@@ -847,7 +846,6 @@ export class World {
 
         this.maxParticles = 10000;
         this.objects = [];
-        this.particles = [];
         this.recalculateWorld = false;
     }
 
@@ -858,12 +856,9 @@ export class World {
         //Recalculate all object id's
         if (this.recalculateWorld) {
             const newObjects = [];
-            let pointer = 0;
             for (const objectIndex in this.objects) {
                 if (this.objects[objectIndex] != null) {
                     newObjects.push(this.objects[objectIndex]);
-                    this.objects[objectIndex].worldId = pointer;
-                    pointer++;
                 }
             }
             this.objects = newObjects;
@@ -872,12 +867,6 @@ export class World {
         for (const objectIndex in this.objects) {
             if (this.objects[objectIndex] != null) {
                 this.objects[objectIndex].tick();
-            }
-        }
-
-        for (const particleIndex in this.particles) {
-            if (this.objects[particleIndex] != null) {
-                this.particles[particleIndex].tick();
             }
         }
 
@@ -924,12 +913,6 @@ export class World {
             context.stroke();
         }
 
-        for (const particleIndex in this.particles) {
-            if (this.particles[particleIndex] != null) {
-                this.particles[particleIndex].render();
-            }
-        }
-
         for (const objectIndex in this.objects) {
             if (this.objects[objectIndex] != null) {
                 this.objects[objectIndex].render(context);
@@ -954,20 +937,7 @@ export class World {
         }
     }
 
-    public addParticle(particle: any) {
-        this.particles.push(particle);
-        if (this.particles.length - 1 >= this.maxParticles) {
-            this.particles.shift();
-        }
-    }
-
-    public addObject(objectToAdd: any) {
+    public addObject(objectToAdd: Car | Driver) {
         this.objects.push(objectToAdd);
-        objectToAdd.worldId = this.objects.length - 1;
-    }
-
-    public removeObject(id: any) {
-        this.recalculateWorld = true;
-        this.objects[id] = null;
     }
 }
