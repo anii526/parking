@@ -1,5 +1,6 @@
+import { DriveRoutePoint } from "./drive-route-point";
 import { Car } from "./car";
-import { DriveRoutePoint, getShortAngle } from "./app";
+import { getShortAngle } from "./app";
 
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 export class Driver {

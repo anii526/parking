@@ -1,4 +1,8 @@
-import { CarEngine, Wheel, Wheels, Coord, LoadImageToCanvas } from "./app";
+import { Coord } from "./coord";
+import { Wheels } from "./wheels";
+import { Wheel } from "./wheel";
+import { CarEngine } from "./car-engine";
+import { LoadImageToCanvas } from "./app";
 
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 export class Car {

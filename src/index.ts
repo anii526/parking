@@ -1,9 +1,9 @@
-import { CanvasFunctions, DriveRoutePoint } from "./app/app";
 import { World } from "./app/world";
 import "core-js";
 import "./style.css";
 import { Car } from "./app/car";
 import { Driver } from "./app/driver";
+import { DriveRoutePoint } from "./app/drive-route-point";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -35,31 +35,31 @@ $(document).ready(() => {
     world.addObject(aiCar2);
     world.addObject(driver2);
 
-    canvas.addEventListener("mousemove", (evt: MouseEvent) => {
-        const mousePos = CanvasFunctions.getMousePos(canvas, evt);
+    // canvas.addEventListener("mousemove", (evt: MouseEvent) => {
+    //     const mousePos = CanvasFunctions.getMousePos(canvas, evt);
 
-        const mouseX = world.viewCenterX - canvas.width * 0.5 + mousePos.x;
-        const mouseY = world.viewCenterY - canvas.height * 0.5 + mousePos.y;
-        context.rect(mouseX - 3, mouseY - 3, 3, 3);
-        context.stroke();
-    });
+    //     const mouseX = world.viewCenterX - canvas.width * 0.5 + mousePos.x;
+    //     const mouseY = world.viewCenterY - canvas.height * 0.5 + mousePos.y;
+    //     context.rect(mouseX - 3, mouseY - 3, 3, 3);
+    //     context.stroke();
+    // });
 
-    canvas.addEventListener(
-        "click",
-        (evt: MouseEvent) => {
-            const mousePos = CanvasFunctions.getMousePos(canvas, evt);
+    // canvas.addEventListener(
+    //     "click",
+    //     (evt: MouseEvent) => {
+    //         const mousePos = CanvasFunctions.getMousePos(canvas, evt);
 
-            const mouseX = mousePos.x + world.viewCenterX - canvas.width * 0.5;
-            const mouseY = mousePos.y + world.viewCenterY - canvas.height * 0.5;
+    //         const mouseX = mousePos.x + world.viewCenterX - canvas.width * 0.5;
+    //         const mouseY = mousePos.y + world.viewCenterY - canvas.height * 0.5;
 
-            console.log(world.viewCenterX + ", " + canvas.width * 0.5);
-            const message = "Mouse position: " + mousePos.x + "," + mousePos.y + ":" + mouseX + ", " + mouseY;
-            //document.editor.mouseDown(mouseX,mouseY)
+    //         console.log(world.viewCenterX + ", " + canvas.width * 0.5);
+    //         const message = "Mouse position: " + mousePos.x + "," + mousePos.y + ":" + mouseX + ", " + mouseY;
+    //         //document.editor.mouseDown(mouseX,mouseY)
 
-            console.log(message);
-        },
-        false
-    );
+    //         console.log(message);
+    //     },
+    //     false
+    // );
 
     const pressedKeys: any = {};
 
