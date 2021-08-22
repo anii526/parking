@@ -2,16 +2,6 @@
 export function getShortAngle(a1: number, a2: number) {
     return Math.cos(a1 - a2 + Math.PI / 2);
 }
-export class CanvasFunctions {
-    public static getMousePos = (canvas: HTMLCanvasElement, evt: MouseEvent) => {
-        const rect = canvas.getBoundingClientRect();
-        return {
-            x: evt.clientX - rect.left,
-            y: evt.clientY - rect.top,
-        };
-    };
-}
-
 /*
 env 	Target canvas
 img 	Specifies the image, canvas, or video element to use 	 	

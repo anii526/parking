@@ -2,8 +2,6 @@ import { World } from "./app/world";
 import "core-js";
 import "./style.css";
 import { Car } from "./app/car";
-import { Driver } from "./app/driver";
-import { DriveRoutePoint } from "./app/drive-route-point";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -21,46 +19,6 @@ $(document).ready(() => {
     const car = new Car();
     const world = new World();
 
-    const aiCar = new Car();
-    const driver = new Driver(aiCar);
-
-    world.addObject(aiCar);
-    world.addObject(driver);
-
-    const aiCar2 = new Car();
-    const driver2 = new Driver(aiCar2);
-    aiCar2.xpos = 0;
-    aiCar2.ypos = 0;
-
-    world.addObject(aiCar2);
-    world.addObject(driver2);
-
-    // canvas.addEventListener("mousemove", (evt: MouseEvent) => {
-    //     const mousePos = CanvasFunctions.getMousePos(canvas, evt);
-
-    //     const mouseX = world.viewCenterX - canvas.width * 0.5 + mousePos.x;
-    //     const mouseY = world.viewCenterY - canvas.height * 0.5 + mousePos.y;
-    //     context.rect(mouseX - 3, mouseY - 3, 3, 3);
-    //     context.stroke();
-    // });
-
-    // canvas.addEventListener(
-    //     "click",
-    //     (evt: MouseEvent) => {
-    //         const mousePos = CanvasFunctions.getMousePos(canvas, evt);
-
-    //         const mouseX = mousePos.x + world.viewCenterX - canvas.width * 0.5;
-    //         const mouseY = mousePos.y + world.viewCenterY - canvas.height * 0.5;
-
-    //         console.log(world.viewCenterX + ", " + canvas.width * 0.5);
-    //         const message = "Mouse position: " + mousePos.x + "," + mousePos.y + ":" + mouseX + ", " + mouseY;
-    //         //document.editor.mouseDown(mouseX,mouseY)
-
-    //         console.log(message);
-    //     },
-    //     false
-    // );
-
     const pressedKeys: any = {};
 
     $(document).keydown((e: any) => {
@@ -75,7 +33,6 @@ $(document).ready(() => {
 
     world.addObject(car);
 
-    let setTarget = false;
     setInterval(() => {
         //ctx.clearRect(0,0,1000,1000);
 
@@ -119,15 +76,6 @@ $(document).ready(() => {
 
         if (pressedKeys[40]) {
             car.brakeReverse(0.01);
-        }
-
-        if (car.xpos && setTarget == false) {
-            driver2.setTarget(new DriveRoutePoint(aiCar.xpos, aiCar.ypos, false));
-            driver2.reachedTarget = false;
-
-            driver.setTarget(new DriveRoutePoint(car.xpos, car.ypos, false));
-            driver.reachedTarget = false;
-            setTarget = false;
         }
     }, 50);
     world.tick();

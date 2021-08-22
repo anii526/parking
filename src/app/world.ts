@@ -1,6 +1,5 @@
 import { canvas, context } from "..";
 import { Car } from "./car";
-import { Driver } from "./driver";
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 export class World {
     public translateX: number;
@@ -9,7 +8,7 @@ export class World {
     public viewCenterY: number;
     public targetFrameTime: number;
     public maxParticles: number;
-    public objects: Array<Car | Driver>;
+    public objects: Array<Car>;
     public recalculateWorld: boolean;
     public minX = 0;
     public maxX = 0;
@@ -100,8 +99,6 @@ export class World {
         const endDate = new Date();
         const frameStop = endDate.getMilliseconds();
         const frameTime = frameStop - frameStart;
-        //context.font="30px Arial";
-        //context.fillText(frameTime + " / " + tickTime,playerOrganism.physics.xpos, playerOrganism.physics.ypos);
 
         const timeout = this.targetFrameTime - frameTime - tickTime;
         if (timeout <= 0 || timeout > this.targetFrameTime) {
@@ -115,7 +112,7 @@ export class World {
         }
     }
 
-    public addObject(objectToAdd: Car | Driver) {
+    public addObject(objectToAdd: Car) {
         this.objects.push(objectToAdd);
     }
 }
