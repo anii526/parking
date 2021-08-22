@@ -7,11 +7,7 @@ export class Wheel {
     public xoffset: number;
     public yoffset: number;
     public length = 10;
-    public maxAngle = Math.PI * 0.35;
-    public minAngle = -Math.PI * 0.35;
-
     public heading = 0;
-    public vr = 0; //Rotational speed
     public frontCoord: Coord;
     public backCoord: Coord;
     public center: Coord;
@@ -21,11 +17,8 @@ export class Wheel {
         this.xoffset = xoffset;
         this.yoffset = yoffset;
         this.length = 10;
-        this.maxAngle = Math.PI * 0.35;
-        this.minAngle = -Math.PI * 0.35;
 
         this.heading = 0;
-        this.vr = 0; //Rotational speed
 
         this.frontCoord = new Coord();
         this.backCoord = new Coord();

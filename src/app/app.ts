@@ -1,7 +1,4 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-export function getShortAngle(a1: number, a2: number) {
-    return Math.cos(a1 - a2 + Math.PI / 2);
-}
 /*
 env 	Target canvas
 img 	Specifies the image, canvas, or video element to use 	 	

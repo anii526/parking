@@ -137,17 +137,17 @@ export class Car {
 
         this.steering.render(env);
 
-        if (this.imageLoaded) {
-            LoadImageToCanvas(
-                env,
-                this.imageObj,
-                this.xpos,
-                this.ypos,
-                -this.heading,
-                this.width / 2 + this.imageXoffset,
-                this.height / 2 + this.imageYoffset
-            );
-        }
+        // if (this.imageLoaded) {
+        //     LoadImageToCanvas(
+        //         env,
+        //         this.imageObj,
+        //         this.xpos,
+        //         this.ypos,
+        //         -this.heading,
+        //         this.width / 2 + this.imageXoffset,
+        //         this.height / 2 + this.imageYoffset
+        //     );
+        // }
         //Draw braking lights:
 
         if (this.braking > 0) {

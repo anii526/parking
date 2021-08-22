@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 export class CarEngine {
     public maxPower: number;
-    public revs: number;
+    // public revs: number;
     public maxPowerInReverse: number;
     public power: number;
     public trottle: number;
     constructor() {
         this.maxPower = 1;
-        this.revs = 1000;
+        // this.revs = 1000;
         this.maxPowerInReverse = 0.2;
         this.power = 0;
         this.trottle = 0;
