@@ -9,7 +9,6 @@ export class Car {
     public xpos = 100;
     public ypos = 100;
     public friction = 0.95; //-1
-    public mass = 50;
     public blinkers = 0; //0 = off , -1 left, 1: right, 2 all
     public blinkerIteration = 0;
 
@@ -52,7 +51,6 @@ export class Car {
         this.xpos = 100;
         this.ypos = 100;
         this.friction = 0.95; //-1
-        this.mass = 50;
         this.blinkers = 0; //0 = off , -1 left, 1: right, 2 all
         this.blinkerIteration = 0;
 

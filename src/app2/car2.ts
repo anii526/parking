@@ -1,4 +1,4 @@
-export class Car {
+export class Car2 {
     public carSpeed = 0;
 
     public frontWheelX = 0;
