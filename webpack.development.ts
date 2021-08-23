@@ -18,9 +18,9 @@ module.exports = (env: { mode: "development" | "production" }) => {
             // public: "bs-local.com",
             // host: "192.168.1.112",
             port: 8080,
-            open: true,
-            openPage: "http://localhost:8080/",
+            // openPage: "http://localhost:8080/",
             // allowedHosts: ["bs-local.com"],
+            open: ["http://localhost:8080/"],
         },
 
         module: {
