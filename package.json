@@ -23,7 +23,7 @@
         "core-js": "^3.9.1",
         "gsap": "^3.6.0",
         "howler": "^2.2.1",
-        "pixi.js": "^6.1.2"
+        "pixi.js-legacy": "^6.1.2"
     },
     "devDependencies": {
         "@babel/core": "^7.13.10",

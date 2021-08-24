@@ -1,4 +1,4 @@
-import { canvas, context } from "..";
+import { canvas, context } from ".";
 import { Car } from "./car";
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 export class World {
