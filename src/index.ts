@@ -83,7 +83,7 @@ $(document).ready(() => {
 });
 
 import * as PIXI from "pixi.js";
-// import { Car2 } from "./app2/car2";
+import { Car2 } from "./app2/car2";
 
 const app = new PIXI.Application({
     width: 800,
@@ -106,54 +106,61 @@ car2.x = 100;
 car2.y = 100;
 container.addChild(car2);
 
-// const physicCar = new Car2();
+const physicCar = new Car2();
 
-// app.ticker.add((dt: number) => {
-app.ticker.maxFPS = 30;
-app.ticker.add(() => {
-    if (car) {
-        const { xpos, ypos, heading } = car;
-        car2.x = xpos;
-        car2.y = ypos;
-        car2.rotation = -heading;
+app.ticker.maxFPS = 60;
+app.ticker.add((dt: number) => {
+    // app.ticker.add(() => {
+    // if (car) {
+    //     const { xpos, ypos, heading } = car;
+    //     car2.x = xpos;
+    //     car2.y = ypos;
+    //     car2.rotation = -heading;
 
-        // console.log(heading);
+    //     // console.log(heading);
+    // }
+
+    if (physicCar) {
+        const { carLocationX, carLocationY, carHeading } = physicCar.update(car2.x, car2.y, dt);
+        car2.x = carLocationX;
+        car2.y = carLocationY;
+        car2.rotation = carHeading - Math.PI / 2;
+
+        console.log(carHeading);
     }
 
-    // if (physicCar) {
-    //     const { carLocationX, carLocationY, carHeading } = physicCar.update(car2.x, car2.y, dt);
-    //     car2.x = carLocationX;
-    //     car2.y = carLocationY;
-    //     car2.rotation = carHeading - Math.PI / 2;
+    if (pressedKeys[39]) {
+        physicCar.steerAngle += 0.05;
+        if (physicCar.steerAngle > 0.7) {
+            physicCar.steerAngle = 0.7;
+        }
+    }
+    if (pressedKeys[37]) {
+        physicCar.steerAngle -= 0.05;
+        if (physicCar.steerAngle < -0.7) {
+            physicCar.steerAngle = -0.7;
+        }
+    }
 
-    //     console.log(carHeading);
-    // }
+    if (pressedKeys[38]) {
+        physicCar.carSpeed += 0.1;
+    }
 
-    // if (pressedKeys[39]) {
-    //     physicCar.steerAngle += 0.001;
-    // }
-    // if (pressedKeys[37]) {
-    //     physicCar.steerAngle -= 0.001;
-    // }
-
-    // if (pressedKeys[38]) {
-    //     physicCar.carSpeed += 0.1;
-    // }
-
-    // if (pressedKeys[40]) {
-    //     physicCar.carSpeed -= 0.1;
-    // }
-    // if (pressedKeys[32]) {
-    //     physicCar.carSpeed = 0;
-    // }
+    if (pressedKeys[40]) {
+        physicCar.carSpeed -= 0.1;
+    }
+    if (pressedKeys[32]) {
+        physicCar.carSpeed = 0;
+        physicCar.steerAngle = 0;
+    }
 });
 
-// const pressedKeys: any = {};
+const pressedKeys: any = {};
 
-// $(document).keydown((e: any) => {
-//     pressedKeys[e.keyCode] = true;
-// });
+$(document).keydown((e: any) => {
+    pressedKeys[e.keyCode] = true;
+});
 
-// $(document).keyup((e: any) => {
-//     delete pressedKeys[e.keyCode];
-// });
+$(document).keyup((e: any) => {
+    delete pressedKeys[e.keyCode];
+});

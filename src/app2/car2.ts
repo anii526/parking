@@ -7,7 +7,7 @@ export class Car2 {
     public backWheelX = 0;
     public backWheelY = 0;
 
-    public wheelBase = 10;
+    public wheelBase = 90;
 
     public carHeading = 0;
     public steerAngle = 0;
