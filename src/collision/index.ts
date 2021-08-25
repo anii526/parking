@@ -1,121 +1,11 @@
+import { CollisionSprite } from "./collision-sprite";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 import * as PIXI from "pixi.js";
+import { CollisionShape } from "./collision-shape";
 console.clear();
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-//
-// EDGE
-// ===========================================================================
-export class Edge {
-    constructor(public p1: PIXI.Point, public p2: PIXI.Point) {}
-    public intersects(edge: Edge, asSegment: boolean, point: PIXI.Point) {
-        const a = this.p1;
-        const b = this.p2;
-        const e = edge.p1;
-        const f = edge.p2;
-
-        const a1 = b.y - a.y;
-        const a2 = f.y - e.y;
-        const b1 = a.x - b.x;
-        const b2 = e.x - f.x;
-        const c1 = b.x * a.y - a.x * b.y;
-        const c2 = f.x * e.y - e.x * f.y;
-        const denom = a1 * b2 - a2 * b1;
-
-        if (denom === 0) {
-            return null;
-        }
-
-        point.x = (b1 * c2 - b2 * c1) / denom;
-        point.y = (a2 * c1 - a1 * c2) / denom;
-
-        if (asSegment) {
-            const uc = (f.y - e.y) * (b.x - a.x) - (f.x - e.x) * (b.y - a.y);
-            const ua = ((f.x - e.x) * (a.y - e.y) - (f.y - e.y) * (a.x - e.x)) / uc;
-            const ub = ((b.x - a.x) * (a.y - e.y) - (b.y - a.y) * (a.x - e.x)) / uc;
-
-            if (ua >= 0 && ua <= 1 && ub >= 0 && ub <= 1) {
-                return point;
-            } else {
-                return null;
-            }
-        }
-
-        return point;
-    }
-}
-
-//
-// COLLISION SHAPE
-// ===========================================================================
-export class CollisionShape {
-    public edges: Edge[];
-    public points: PIXI.Point[];
-    public AABB: PIXI.Rectangle;
-    public bounds: PIXI.Bounds;
-    public intersectionPoint: PIXI.Point;
-    public target: PIXI.Sprite;
-    public vertices: PIXI.Point[];
-    constructor(target: PIXI.Sprite, vertices: PIXI.Point[]) {
-        this.edges = [];
-        this.points = [];
-        this.AABB = new PIXI.Rectangle();
-        this.bounds = new PIXI.Bounds();
-        this.intersectionPoint = new PIXI.Point();
-        this.target = target;
-        this.vertices = vertices;
-
-        for (let i = 0; i < vertices.length; i++) {
-            const p1 = vertices[i];
-            const p2 = vertices[i + 1] || vertices[0];
-            this.points.push(p1.clone());
-            this.edges.push(new Edge(p1, p2));
-        }
-
-        this.update();
-    }
-    public update() {
-        const transform = this.target.transform.worldTransform;
-        const vertices = this.vertices;
-        const points = this.points;
-        const bounds = this.bounds;
-
-        bounds.clear();
-
-        for (let i = 0; i < points.length; i++) {
-            const vertex = transform.apply(points[i], vertices[i]);
-            bounds.addPoint(vertex);
-        }
-
-        bounds.getRectangle(this.AABB);
-    }
-
-    public intersectsAABB(shape: CollisionShape) {
-        const a = this.bounds;
-        const b = shape.bounds;
-
-        return !(a.maxX < b.minX || a.maxY < b.minY || a.minX > b.maxX || a.minY > b.maxY);
-    }
-
-    public intersectsShape(shape: CollisionShape) {
-        const edges1 = this.edges;
-        const edges2 = shape.edges;
-
-        for (let i = 0; i < edges1.length; i++) {
-            const edge1 = edges1[i];
-
-            for (let j = 0; j < edges2.length; j++) {
-                const edge2 = edges2[j];
-                if (edge1.intersects(edge2, true, this.intersectionPoint)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-}
 
 //
 // APPLICATION
@@ -137,7 +27,7 @@ const app = new PIXI.Application({
 });
 document.body.appendChild(app.view);
 
-const sprites: PIXI.Sprite[] = [];
+const sprites: CollisionSprite[] = [];
 const container = new PIXI.Container();
 
 for (let i = 0; i < 10; i++) {
@@ -187,7 +77,7 @@ function createSprite() {
 
     const graphics = new PIXI.Graphics().beginFill(0xffffff).drawPolygon(points).endFill();
 
-    const sprite = new PIXI.Sprite(app.renderer.generateTexture(graphics));
+    const sprite = new CollisionSprite(app.renderer.generateTexture(graphics));
 
     sprite.alpha = 0.6;
     sprite.x = random(100, vw - 100);
@@ -198,14 +88,14 @@ function createSprite() {
     sprite.scale.set(random(0.4, 1));
 
     sprite.hitArea = new PIXI.Polygon(points);
-    (sprite as any).shape = new CollisionShape(sprite, points);
-    (sprite as any).collisionID = 1;
-    (sprite as any).collision = COLLISION.NONE;
-    sprite.tint = (sprite as any).collision;
+    sprite.shape = new CollisionShape(sprite, points);
+    sprite.collisionID = 1;
+    sprite.collision = COLLISION.NONE;
+    sprite.tint = sprite.collision;
 
-    (sprite as any).dragging = false;
-    (sprite as any).newPosition = new PIXI.Point();
-    (sprite as any).lastPosition = new PIXI.Point();
+    sprite.dragging = false;
+    sprite.newPosition = new PIXI.Point();
+    sprite.lastPosition = new PIXI.Point();
 
     sprite.interactive = true;
     sprite.buttonMode = true;
@@ -229,11 +119,11 @@ function detectCollisions() {
 
     for (let i = 0; i < sprites.length; i++) {
         const sprite = sprites[i];
-        (sprite as any).collision = COLLISION.NONE;
+        sprite.collision = COLLISION.NONE;
 
-        // if ((sprite as any).collisionID) {
-        (sprite as any).shape.update();
-        // (sprite as any).collisionID = 0;
+        // if (sprite.collisionID) {
+        sprite.shape.update();
+        // sprite.collisionID = 0;
         // }
     }
 
@@ -244,25 +134,25 @@ function detectCollisions() {
             const sprite2 = sprites[j];
 
             // Check for AABB intersections to determine what shapes might be overlapping
-            if ((sprite1 as any).shape.intersectsAABB((sprite2 as any).shape)) {
-                if ((sprite1 as any).collision === COLLISION.NONE) {
-                    (sprite1 as any).collision = COLLISION.AABB;
+            if (sprite1.shape.intersectsAABB(sprite2.shape)) {
+                if (sprite1.collision === COLLISION.NONE) {
+                    sprite1.collision = COLLISION.AABB;
                 }
 
-                if ((sprite2 as any).collision === COLLISION.NONE) {
-                    (sprite2 as any).collision = COLLISION.AABB;
+                if (sprite2.collision === COLLISION.NONE) {
+                    sprite2.collision = COLLISION.AABB;
                 }
 
-                if ((sprite1 as any).shape.intersectsShape((sprite2 as any).shape)) {
-                    (sprite1 as any).collision = COLLISION.SHAPE;
-                    (sprite2 as any).collision = COLLISION.SHAPE;
+                if (sprite1.shape.intersectsShape(sprite2.shape)) {
+                    sprite1.collision = COLLISION.SHAPE;
+                    sprite2.collision = COLLISION.SHAPE;
                 }
             }
 
-            sprite2.tint = (sprite2 as any).collision;
+            sprite2.tint = sprite2.collision;
         }
 
-        sprite1.tint = (sprite1 as any).collision;
+        sprite1.tint = sprite1.collision;
     }
 }
 
@@ -275,8 +165,8 @@ function update() {
     graphics.clear().lineStyle(1, 0xffffff, 0.8);
 
     for (let i = 0; i < sprites.length; i++) {
-        (sprites[i] as any).rotation += 0.01;
-        const box = (sprites[i] as any).shape.AABB;
+        sprites[i].rotation += 0.01;
+        const box = sprites[i].shape.AABB;
         graphics.drawRect(box.x, box.y, box.width, box.height);
     }
 }
