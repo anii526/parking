@@ -155,7 +155,7 @@ const graphics = new PIXI.Graphics();
 app.stage.addChild(container, graphics, text);
 app.ticker.add(update);
 window.addEventListener("resize", onResize);
-
+// container.updateTransform();
 //
 // CREATE SPRITE
 // ===========================================================================
@@ -225,16 +225,16 @@ function createSprite() {
 // DETECT COLLISIONS
 // ===========================================================================
 function detectCollisions() {
-    container.updateTransform();
+    // container.updateTransform();
 
     for (let i = 0; i < sprites.length; i++) {
         const sprite = sprites[i];
         (sprite as any).collision = COLLISION.NONE;
 
-        if ((sprite as any).collisionID) {
-            (sprite as any).shape.update();
-            (sprite as any).collisionID = 0;
-        }
+        // if ((sprite as any).collisionID) {
+        (sprite as any).shape.update();
+        // (sprite as any).collisionID = 0;
+        // }
     }
 
     for (let i = 0; i < sprites.length; i++) {
@@ -275,6 +275,7 @@ function update() {
     graphics.clear().lineStyle(1, 0xffffff, 0.8);
 
     for (let i = 0; i < sprites.length; i++) {
+        (sprites[i] as any).rotation += 0.01;
         const box = (sprites[i] as any).shape.AABB;
         graphics.drawRect(box.x, box.y, box.width, box.height);
     }
