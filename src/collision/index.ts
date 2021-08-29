@@ -115,16 +115,16 @@ function createSprite() {
 // DETECT COLLISIONS
 // ===========================================================================
 function detectCollisions() {
-    // container.updateTransform();
+    container.updateTransform();
 
     for (let i = 0; i < sprites.length; i++) {
         const sprite = sprites[i];
         sprite.collision = COLLISION.NONE;
 
-        // if (sprite.collisionID) {
-        sprite.shape.update();
-        // sprite.collisionID = 0;
-        // }
+        if (sprite.collisionID) {
+            sprite.shape.update();
+            sprite.collisionID = 0;
+        }
     }
 
     for (let i = 0; i < sprites.length; i++) {
@@ -165,7 +165,7 @@ function update() {
     graphics.clear().lineStyle(1, 0xffffff, 0.8);
 
     for (let i = 0; i < sprites.length; i++) {
-        sprites[i].rotation += 0.01;
+        // sprites[i].rotation += 0.01;
         const box = sprites[i].shape.AABB;
         graphics.drawRect(box.x, box.y, box.width, box.height);
     }
