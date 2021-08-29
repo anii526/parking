@@ -27,10 +27,28 @@ car2.x = 100;
 car2.y = 100;
 container.addChild(car2);
 
+const points = [];
+points.push(new PIXI.Point(-11.35, -54.5));
+points.push(new PIXI.Point(11.35, -54.5));
+points.push(new PIXI.Point(20.55, -48.15));
+points.push(new PIXI.Point(25, -35.1));
+
+points.push(new PIXI.Point(25, 43.9));
+points.push(new PIXI.Point(8.85, 54.5));
+points.push(new PIXI.Point(-8.85, 54.5));
+points.push(new PIXI.Point(-25, 43.9));
+
+points.push(new PIXI.Point(-25, -35.1));
+points.push(new PIXI.Point(-20.55, -48.15));
+
+const graphics = new PIXI.Graphics().beginFill(0xff0fab, 0.5).drawPolygon(points).endFill();
+car2.addChild(graphics);
+
 const physicCar = new Car2();
 
 app.ticker.maxFPS = 60;
 app.ticker.add((dt: number) => {
+    // return;
     // app.ticker.add(() => {
     // if (car) {
     //     const { xpos, ypos, heading } = car;
